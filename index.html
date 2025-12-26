@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Veliki Merlin</title>
+    <title>Veliki Merlin / Great Merlin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -23,7 +23,6 @@
 
         body.magic-active { background: radial-gradient(circle, #4b0082, #000000); }
 
-        /* MAGIČNI BLJESAK (BUM) */
         #flash-bang {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: white; opacity: 0; pointer-events: none; z-index: 100;
@@ -33,7 +32,6 @@
             0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; }
         }
 
-        /* MERLIN KONTEJNER */
         .merlin-container {
             position: relative; width: 100%; height: 280px;
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
@@ -62,7 +60,6 @@
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
         }
 
-        /* KOLUTANJE OČIMA */
         .rolling-eyes .pupil { animation: rollAnim 0.6s infinite linear; }
         @keyframes rollAnim {
             from { transform: translate(-50%, -50%) rotate(0deg) translateY(-20px) rotate(0deg); }
@@ -88,13 +85,11 @@
             background: rgba(255, 255, 255, 0.1); padding: 5px 15px; border-radius: 15px;
         }
 
-        /* MLIN I ZUPČANICI */
         .mill-box { display: none; justify-content: center; gap: 10px; margin: 15px 0; }
         .cog { font-size: 55px; color: var(--magic-gold); }
         .cog-right { animation: rotateMlin 2s infinite linear; }
         .cog-left { animation: rotateMlinRev 2s infinite linear; margin-right: -10px; }
 
-        /* GRID SA SIMBOLIMA */
         .symbol-grid {
             display: grid; grid-template-columns: repeat(4, 1fr);
             gap: 12px; max-height: 350px; overflow-y: auto;
@@ -108,7 +103,6 @@
         .sym-card .num { font-size: 1.2rem; color: var(--magic-gold); }
         .sym-card .icon { font-size: 2.2rem; }
 
-        /* FINALNA ŽIVOTINJA */
         #final-res { 
             font-size: 250px; display: none; 
             filter: drop-shadow(0 0 60px var(--magic-gold)); 
@@ -116,18 +110,26 @@
         }
         .final-pop { animation: finalPopAnim 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards; }
 
-        /* DUGME */
+        /* JEZIČKI EKRAN */
+        #lang-selector {
+            display: flex; flex-direction: column; gap: 15px; margin-top: 20px;
+        }
+        .lang-btn {
+            background: rgba(255,255,255,0.1); border: 2px solid var(--magic-purple);
+            color: white; padding: 15px 40px; font-size: 1.6rem; border-radius: 50px;
+            cursor: pointer; transition: 0.3s; font-family: inherit;
+        }
+        .lang-btn:hover { background: var(--magic-purple); transform: scale(1.05); }
+
         .btn-magic {
             background: var(--magic-gold); color: #000; border: none;
             padding: 18px 45px; font-size: 2rem; font-weight: 900;
             border-radius: 80px; cursor: pointer; box-shadow: 0 8px 0 #b89b00;
             display: none; text-transform: uppercase; margin-top: 20px;
-            transition: opacity 0.3s;
         }
         .btn-magic.show { display: block; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .btn-magic:disabled { opacity: 0.6; cursor: default; box-shadow: none; transform: translateY(4px); }
+        .btn-magic:disabled { opacity: 0.6; }
 
-        /* ANIMACIJE */
         @keyframes finalPopAnim {
             0% { transform: scale(0) rotate(-20deg); opacity: 0; }
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
@@ -152,6 +154,10 @@
     </div>
 
     <div class="interaction-zone">
+        <div id="lang-selector">
+            <button class="lang-btn" onclick="startWithLang('bs')">🇧🇦 Bosanski</button>
+            <button class="lang-btn" onclick="startWithLang('en')">🇺🇸 English</button>
+        </div>
         <div id="merlin-sentence"></div>
         <div id="magic-mill" class="mill-box">
             <i class="fas fa-cog cog cog-left"></i>
@@ -171,12 +177,68 @@
         const eyesBox = document.getElementById('merlin-eyes-box');
         const flash = document.getElementById('flash-bang');
         const merlinChar = document.getElementById('merlin-character');
+        const langSelector = document.getElementById('lang-selector');
 
         let symbols = ['🐶', '🐯', '🦄', '🐸', '🐼', '🍎', '🚀', '🌈', '🍦', '🍕', '🎁', '🎈', '🎨', '🦁', '⭐', '🦖', '⚽', '💎', '🍄', '🍔'];
         let magicEmoji = symbols[Math.floor(Math.random() * symbols.length)];
         let currentAct = 0;
         let lineIndex = 0;
         let isRolling = false;
+        let chosenActs = [];
+        let replayText = "";
+
+        const translations = {
+            bs: {
+                acts: [
+                    { lines: ["Šššššš...", "Ja sam <span class='viking-size'>VELIKI</span> Merlin!", "Gledaću u tvoje misli!"], btn: "KRENI! ▶️" },
+                    { lines: ["Zamisli jedan <span class='viking-size'>DVOCIFRENI</span> broj."], btn: "ZAMISLIO SAM! 🤔", needsWait: true },
+                    {
+                        isMath: true,
+                        lines: [
+                            { t: "Sada taj broj ubaci u moj <br><span class='viking-size'>MAGIČNI MLIN</span>", auto: true },
+                            { t: "On će ga samleti u prah...", auto: true },
+                            { t: "I stvoriti tvoj <br><span class='viking-size'>NOVI MAGIČNI BROJ!</span>", auto: true },
+                            { t: "Hajde, sada da računamo", auto: true },
+                            { t: "Saberi cifre tvog broja", ex: "Primer: 12 -> 1+2 = 3", auto: false, b: "DALJE ➡️" },
+                            { t: "I sad taj zbir oduzmi od tvog broja", ex: "Primer: 12 - 3 = 9", auto: false, b: "DALJE ➡️" },
+                            { t: "Tako je! Mlin je završio posao...", auto: true },
+                            { t: "I zapamti taj novi broj!", auto: false, b: "ZAPAMTIO SAM! ✨" }
+                        ]
+                    },
+                    { lines: ["Pogledaj u <span class='viking-size'>VELIKI</span> zid!", "Zapamti sliku u kockici <br>pored tvog broja."], btn: "ZAPAMTIO SAM! 🖼️", showGrid: true },
+                    {
+                        isVision: true,
+                        lines: ["A sada... TIŠINA.", "Vaše misli su <span class='viking-size'>OGROMNE</span>!", "Vidim...", "Vidiim..."]
+                    }
+                ],
+                replay: "PONOVO 🔄"
+            },
+            en: {
+                acts: [
+                    { lines: ["Shhh...", "I am the <span class='viking-size'>GREAT</span> Merlin!", "I will look into your mind!"], btn: "START! ▶️" },
+                    { lines: ["Think of a <span class='viking-size'>TWO-DIGIT</span> number."], btn: "I HAVE IT! 🤔", needsWait: true },
+                    {
+                        isMath: true,
+                        lines: [
+                            { t: "Now throw that number into my <br><span class='viking-size'>MAGIC MILL</span>", auto: true },
+                            { t: "It will grind it into dust...", auto: true },
+                            { t: "And create your <br><span class='viking-size'>NEW MAGIC NUMBER!</span>", auto: true },
+                            { t: "Now, let's calculate", auto: true },
+                            { t: "Add the digits of your number", ex: "Example: 12 -> 1+2 = 3", auto: false, b: "NEXT ➡️" },
+                            { t: "Now subtract that sum from your number", ex: "Example: 12 - 3 = 9", auto: false, b: "NEXT ➡️" },
+                            { t: "Great! The mill has finished its job...", auto: true },
+                            { t: "Now remember that new number!", auto: false, b: "I REMEMBER IT! ✨" }
+                        ]
+                    },
+                    { lines: ["Look at the <span class='viking-size'>BIG</span> wall!", "Remember the image in the box <br>next to your number."], btn: "I GOT IT! 🖼️", showGrid: true },
+                    {
+                        isVision: true,
+                        lines: ["And now... SILENCE.", "Your thoughts are <span class='viking-size'>HUGE</span>!", "I see it...", "I seeee it..."]
+                    }
+                ],
+                replay: "REPLAY 🔄"
+            }
+        };
 
         function getWaitTime(text) {
             const baseTime = 1300;
@@ -184,32 +246,16 @@
             return baseTime + (text.length * perCharTime);
         }
 
-        const acts = [
-            { lines: ["Šššššš...", "Ja sam <span class='viking-size'>VELIKI</span> Merlin!", "Gledaću u tvoje misli!"], btn: "KRENI! ▶️" },
-            { lines: ["Zamisli jedan <span class='viking-size'>DVOCIFRENI</span> broj."], btn: "ZAMISLIO SAM! 🤔", needsWait: true },
-            {
-                isMath: true,
-                lines: [
-                    { t: "Sada taj broj ubaci u moj <br><span class='viking-size'>MAGIČNI MLIN</span>", auto: true },
-                    { t: "On će ga samleti u prah...", auto: true },
-                    { t: "I stvoriti tvoj <br><span class='viking-size'>NOVI MAGIČNI BROJ!</span>", auto: true },
-                    { t: "Hajde, sada da računamo", auto: true },
-                    { t: "Saberi cifre tvog broja", ex: "Primer: 12 -> 1+2 = 3", auto: false, b: "DALJE ➡️" },
-                    { t: "I sad taj zbir oduzmi od tvog broja", ex: "Primer: 12 - 3 = 9", auto: false, b: "DALJE ➡️" },
-                    { t: "Tako je! Mlin je završio posao...", auto: true },
-                    { t: "I zapamti taj novi broj!", auto: false, b: "ZAPAMTIO SAM! ✨" }
-                ]
-            },
-            { lines: ["Pogledaj u <span class='viking-size'>VELIKI</span> zid!", "Zapamti sliku u kockici <br>pored tvog broja."], btn: "ZAPAMTIO SAM! 🖼️", showGrid: true },
-            {
-                isVision: true,
-                lines: ["A sada... TIŠINA.", "Vaše misli su <span class='viking-size'>OGROMNE</span>!", "Vidim...", "Vidiim..."]
-            }
-        ];
+        function startWithLang(lang) {
+            langSelector.style.display = "none";
+            chosenActs = translations[lang].acts;
+            replayText = translations[lang].replay;
+            playAct(0);
+        }
 
         async function playAct(actIndex) {
             btn.classList.remove('show');
-            const act = acts[actIndex];
+            const act = chosenActs[actIndex];
             lineIndex = 0;
             millEl.style.display = "none";
             grid.style.display = "none";
@@ -245,7 +291,7 @@
 
         async function runMathStep() {
             btn.classList.remove('show');
-            const act = acts[currentAct];
+            const act = chosenActs[currentAct];
             const line = act.lines[lineIndex];
             sentenceEl.style.opacity = "0";
             await new Promise(r => setTimeout(r, 350));
@@ -277,12 +323,12 @@
 
         function handleBtnClick() {
             if (currentAct === 99) { location.reload(); return; }
-            const act = acts[currentAct];
+            const act = chosenActs[currentAct];
             if (act.isMath && lineIndex < act.lines.length - 1) {
                 lineIndex++;
                 runMathStep();
             } else {
-                if (currentAct < acts.length - 1) {
+                if (currentAct < chosenActs.length - 1) {
                     currentAct++;
                     playAct(currentAct);
                 }
@@ -310,7 +356,7 @@
                 finalRes.classList.add('final-pop');
             }, 250);
             setTimeout(() => { 
-                btn.innerText = "PONOVO 🔄"; 
+                btn.innerText = replayText; 
                 btn.classList.add('show'); 
                 btn.disabled = false;
                 document.body.classList.remove('magic-active');
@@ -318,7 +364,6 @@
             }, 4500);
         }
 
-        window.onload = () => playAct(0);
         setInterval(() => {
             if(!isRolling) {
                 const p1 = document.getElementById('p1');
