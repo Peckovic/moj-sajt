@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merlin's Magic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f001a, #2b004d, #4a1e7c);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .main-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .speech-bubble {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 40px;
+            padding: 30px;
+            width: 90%;
+            max-width: 550px;
+            box-shadow: 0 0 50px rgba(157, 78, 221, 0.6), 0 20px 40px rgba(0,0,0,0.5);
+            border: 6px solid #9d4edd;
+            text-align: center;
+            position: absolute;
+            top: 40px;
+            display: none;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 999;
+        }
+
+        .speech-bubble.show { display: block; }
+
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 35px 30px 0;
+            border-style: solid;
+            border-color: #9d4edd transparent;
+        }
+
+        .bubble-text {
+            font-size: 1.8em;
+            color: #1a0033;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .giant-merlin {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 180px;
+            animation: floatGiant 4s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .magic-hat {
+            font-size: clamp(250px, 50vh, 450px);
+            color: #9d4edd;
+            text-shadow: 0 0 50px rgba(157, 78, 221, 0.9);
+            filter: drop-shadow(0 0 20px black);
+            margin-bottom: -60px;
+            z-index: 10;
+        }
+
+        .eyes-row {
+            display: flex;
+            gap: 50px;
+            z-index: 20;
+        }
+
+        .eye {
+            width: clamp(70px, 12vw, 110px);
+            height: clamp(70px, 12vw, 110px);
+            background: white;
+            border-radius: 50%;
+            border: 7px solid #222;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+            animation: blink 5s infinite;
+        }
+
+        .pupil {
+            width: 45%;
+            height: 45%;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s ease;
+        }
+
+        .sparkle-hand {
+            position: absolute;
+            font-size: clamp(100px, 18vw, 180px);
+            color: rgba(255, 255, 255, 0.35);
+            z-index: 1;
+        }
+
+        .left { left: 20%; top: 45%; animation: crazyFloatLeft 7s ease-in-out infinite; }
+        .right { right: 20%; top: 45%; animation: crazyFloatRight 7s ease-in-out infinite; }
+
+        @keyframes crazyFloatLeft {
+            0%, 100% { transform: translate(0, 0) rotate(-15deg); }
+            25% { transform: translate(-40px, -100px) rotate(-30deg); }
+            50% { transform: translate(60px, 80px) rotate(10deg); }
+            75% { transform: translate(-20px, -50px) rotate(-20deg); }
+        }
+
+        @keyframes crazyFloatRight {
+            0%, 100% { transform: scaleX(-1) translate(0, 0) rotate(-15deg); }
+            25% { transform: scaleX(-1) translate(-40px, 100px) rotate(-5deg); }
+            50% { transform: scaleX(-1) translate(60px, -100px) rotate(-35deg); }
+            75% { transform: scaleX(-1) translate(-20px, 50px) rotate(-15deg); }
+        }
+
+        @keyframes floatGiant {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .question-marks {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            font-size: 1.5em;
+        }
+
+        .q {
+            animation: blinkQuestion 1.5s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .q:nth-child(1) { animation-delay: 0s; }
+        .q:nth-child(2) { animation-delay: 0.2s; }
+        .q:nth-child(3) { animation-delay: 0.4s; }
+        .q:nth-child(4) { animation-delay: 0.6s; }
+        .q:nth-child(5) { animation-delay: 0.8s; }
+
+        @keyframes blinkQuestion {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        #floating-numbers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 500;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 6px;
+            padding: 0px;
+        }
+
+        .floating-symbol {
+            font-size: 1.8em;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 5px;
+            border-radius: 10px;
+            border: 2px solid #9d4edd;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            overflow: hidden;
+        }
+        
+        .floating-symbol .number {
+            font-size: 0.6em;
+            color: #7b2cbf;
+            font-weight: 900;
+            display: block;
+        }
+
+        .center-window {
+            grid-column: 4 / 8;
+            grid-row: 4 / 7;
+            z-index: 1003;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 20px 25px;
+            box-shadow: 0 0 40px rgba(157, 78, 221, 0.8), 0 15px 30px rgba(0,0,0,0.4);
+            border: 4px solid #9d4edd;
+            text-align: center;
+            display: none;
+            pointer-events: all;
+        }
+        
+        .center-window.show {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .center-window .bubble-text {
+            font-size: 1.2em;
+            color: #1a0033;
+            margin-bottom: 15px;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+        
+        .magic-btn {
+            background: linear-gradient(135deg, #b24dff, #7b2cbf);
+            color: white; border: none; padding: 15px 30px;
+            border-radius: 50px; font-size: 1.2em; font-weight: 900;
+            cursor: pointer; box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5); 
+            transition: 0.3s;
+            position: relative;
+            z-index: 1000;
+        }
+        .magic-btn:hover { transform: scale(1.05); }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f001a, #2b004d, #4a1e7c);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #loading-screen.hidden {
+            display: none;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-screen">
+        <i class="fas fa-hat-wizard" style="font-size: 8em; color: #9d4edd; animation: floatGiant 2s ease-in-out infinite;"></i>
+        <div class="loading-text">Loading Magic...</div>
+    </div>
+
+    <div class="main-container">
+        <div class="speech-bubble" id="b1">
+            <div class="bubble-text">Zdravo! Ja sam <strong>Merlin</strong>.<br>Hajde da se igramo čarolije</div>
+            <button class="magic-btn" onclick="goTo(2)">KRENI</button>
+        </div>
+
+        <div class="speech-bubble" id="b2">
+            <div class="bubble-text">Zamisli <strong>broj OD 10 do 99</strong>.<br>???????????</div>
+            <button class="magic-btn" onclick="goTo(3)">ZAMISLIO</button>
+        </div>
+
+        <div class="speech-bubble" id="b3">
+            <div class="bubble-text">
+                SAD<br>
+                uzmi zamišljeni broj<br>
+                i saberi njegove brojeve (??/?+?=x)<br>
+                zatim oduzmi dobijeni broj od ZAMIŠLJENOG (??-x=?)
+                <div class="question-marks">
+                    <span class="q">?</span>
+                    <span class="q">?</span>
+                    <span class="q">?</span>
+                    <span class="q">?</span>
+                    <span class="q">?</span>
+                </div>
+            </div>
+            <button class="magic-btn" onclick="goTo(4)">GOTOVO</button>
+        </div>
+
+        <div id="floating-numbers">
+            <div class="center-window" id="center-btn">
+                <div class="bubble-text">Nađi svoj broj i zapamti <strong>SIMBOL</strong>!</div>
+                <button class="magic-btn" onclick="showResult()">ZAPAMTIO SAM! 👁️</button>
+            </div>
+        </div>
+
+        <div class="speech-bubble" id="b5">
+            <div class="bubble-text">Tvoj simbol je...</div>
+            <div id="final-res" style="font-size: 6em; margin: 10px 0; color: #7b2cbf;">🔮</div>
+            <button class="magic-btn" onclick="restartGame()">PONOVO 🔄</button>
+        </div>
+
+        <i class="fas fa-hand-sparkles sparkle-hand left"></i>
+        <i class="fas fa-hand-sparkles sparkle-hand right"></i>
+
+        <div class="giant-merlin">
+            <i class="fas fa-hat-wizard magic-hat"></i>
+            <div class="eyes-row">
+                <div class="eye"><div class="pupil"></div></div>
+                <div class="eye"><div class="pupil"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Facebook SDK -->
+    <script>
+        // Provjeri da li je Facebook Instant Games dostupan
+        let fbInstantAvailable = false;
+        
+        window.fbAsyncInit = function() {
+            if (typeof FBInstant !== 'undefined') {
+                fbInstantAvailable = true;
+                FBInstant.initializeAsync()
+                    .then(function() {
+                        console.log('Facebook Instant Games initialized');
+                        return FBInstant.startGameAsync();
+                    })
+                    .then(function() {
+                        console.log('Game started');
+                        hideLoadingScreen();
+                    })
+                    .catch(function(err) {
+                        console.error('Facebook init error:', err);
+                        hideLoadingScreen();
+                    });
+            } else {
+                // Nije Facebook okruženje, normalno pokreni igru
+                hideLoadingScreen();
+            }
+        };
+
+        function hideLoadingScreen() {
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                goTo(1);
+            }, 500);
+        }
+    </script>
+    <script src="https://connect.facebook.net/en_US/fbinstant.6.3.js" async></script>
+
+    <!-- Glavna logika igre -->
+    <script>
+        const emojiList = ['🌟', '🎭', '🎨', '🎪', '🎯', '🎲', '🎸', '🎺', '🎻', '🌙', '⭐', '💎', '🔥', '⚡', '🌈', '🍀', '🐉', '🔮'];
+        let magicEmoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+        let eyeInterval;
+
+        function randomEyeMovement() {
+            const pupils = document.querySelectorAll('.pupil');
+            pupils.forEach(pupil => {
+                const randomX = (Math.random() - 0.5) * 30;
+                const randomY = (Math.random() - 0.5) * 30;
+                pupil.style.transform = `translate(calc(-50% + ${randomX}px), calc(-50% + ${randomY}px))`;
+            });
+        }
+
+        function goTo(n) {
+            document.querySelectorAll('.speech-bubble').forEach(b => b.classList.remove('show'));
+            const container = document.getElementById('floating-numbers');
+            const centerBtn = document.getElementById('center-btn');
+            
+            Array.from(container.children).forEach(child => {
+                if(child.id !== 'center-btn') child.remove();
+            });
+            
+            centerBtn.classList.remove('show');
+            
+            if(eyeInterval) {
+                clearInterval(eyeInterval);
+                eyeInterval = null;
+            }
+            
+            setTimeout(() => {
+                const target = document.getElementById('b' + n);
+                if(target && n !== 4) target.classList.add('show');
+                
+                if(n === 4) {
+                    eyeInterval = setInterval(randomEyeMovement, 800);
+                    centerBtn.classList.add('show');
+                    
+                    for(let i = 0; i < 100; i++) {
+                        const s = (i % 9 === 0) ? magicEmoji : emojiList[Math.floor(Math.random()*emojiList.length)];
+                        const div = document.createElement('div');
+                        div.className = 'floating-symbol';
+                        div.innerHTML = `<div>${s}</div><div class="number">${i}</div>`;
+                        container.appendChild(div);
+                    }
+                }
+            }, 50);
+        }
+
+        function showResult() {
+            goTo(5); 
+            const res = document.getElementById('final-res');
+            let c = 0;
+            const timer = setInterval(() => {
+                res.textContent = emojiList[c % emojiList.length];
+                c++;
+            }, 100);
+            setTimeout(() => {
+                clearInterval(timer);
+                res.textContent = magicEmoji;
+                
+                // Facebook share funkcionalnost
+                if (fbInstantAvailable && typeof FBInstant !== 'undefined') {
+                    console.log('Facebook share available');
+                }
+            }, 2500);
+        }
+
+        function restartGame() {
+            magicEmoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+            goTo(1);
+        }
+
+        // Pokreni igru ako Facebook SDK nije učitan nakon 3 sekunde
+        setTimeout(() => {
+            if (!fbInstantAvailable) {
+                hideLoadingScreen();
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
