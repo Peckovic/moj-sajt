@@ -577,6 +577,8 @@
                 }
                 
                 if (line.auto) {
+                    // Hide button when auto text is playing
+                    UI.hideButton();
                     await Utils.sleep(Utils.getWaitTime(line.t));
                     STATE.lineIndex++;
                     if (STATE.lineIndex < act.lines.length) {
