@@ -6,18 +6,12 @@
     <meta name="description" content="Veliki Merlin - Magična igra za čitanje misli / Great Merlin - Magic mind reading game">
     <meta property="og:title" content="Veliki Merlin / Great Merlin">
     <meta property="og:description" content="Interaktivna magična igra koja čita tvoje misli!">
-    <meta property="og:type" content="website">
-    <meta name="author" content="Your Name">
     <title>Veliki Merlin / Great Merlin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --magic-purple: #9d4edd;
             --magic-gold: #ffdf00;
-        }
-
-        * {
-            box-sizing: border-box;
         }
 
         body {
@@ -88,7 +82,13 @@
             min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        .viking-size { font-size: 3.8rem; color: var(--magic-gold); text-transform: uppercase; }
+        .viking-size { 
+            font-size: 3.8rem !important; 
+            color: var(--magic-gold) !important; 
+            text-transform: uppercase !important;
+            font-weight: 900 !important;
+            display: block !important;
+        }
         .example-text {
             display: block; font-size: 1.6rem; color: #ccc; margin-top: 15px;
             background: rgba(255, 255, 255, 0.1); padding: 5px 15px; border-radius: 15px;
@@ -178,81 +178,140 @@
         .btn-magic.show { display: block; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .btn-magic:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* RESPONSIVE - FULL SCREEN MOBILE */
+        /* RESPONSIVE - POPRAVLJENO ZA MOBILNE */
         @media (max-width: 768px) {
-            .merlin-container { height: 320px; }
-            .hat { font-size: 200px; }
-            .eyes-box { gap: 45px; }
-            .eye { width: 65px; height: 65px; }
-            .pupil { width: 28px; height: 28px; }
-            #merlin-sentence { font-size: 2.2rem; min-height: 180px; padding: 0 15px; }
-            .viking-size { font-size: 3.2rem; }
-            .example-text { font-size: 1.5rem; padding: 8px 20px; }
-            .cog { font-size: 50px; }
-            #final-res { font-size: 220px; margin-top: -80px; }
-            .btn-magic { padding: 16px 40px; font-size: 1.8rem; }
-            .lang-btn { padding: 14px 28px; font-size: 1.4rem; }
+            .merlin-container { height: 220px; }
+            .hat { font-size: 140px; }
+            .eyes-box { gap: 25px; margin-bottom: 15px; }
+            .eye { width: 50px; height: 50px; }
+            .pupil { width: 20px; height: 20px; }
+            #merlin-sentence { 
+                font-size: 1.8rem; 
+                min-height: 120px; 
+                padding: 0 10px;
+                line-height: 1.3;
+            }
+            .viking-size { 
+                font-size: 2.5rem !important; 
+                color: var(--magic-gold) !important; 
+                text-transform: uppercase !important;
+                font-weight: 900 !important;
+                display: block !important;
+                line-height: 1.2 !important;
+                margin: 5px 0 !important;
+            }
+            .example-text { 
+                font-size: 1.2rem; 
+                padding: 8px 12px; 
+                margin-top: 10px;
+                line-height: 1.3;
+            }
+            .cog { font-size: 40px; }
+            #final-res { 
+                font-size: 150px; 
+                margin-top: -50px;
+            }
+            .btn-magic { 
+                padding: 14px 30px; 
+                font-size: 1.5rem;
+                margin-top: 15px;
+            }
+            .lang-btn { 
+                padding: 12px 20px; 
+                font-size: 1.2rem;
+            }
         }
 
         @media (max-width: 480px) {
-            body { padding: 10px; }
-            .merlin-container { height: 280px; }
-            .hat { font-size: 180px; }
-            .eyes-box { gap: 35px; margin-bottom: 15px; }
-            .eye { width: 60px; height: 60px; }
-            .pupil { width: 25px; height: 25px; }
+            .merlin-container { height: 180px; }
+            .hat { font-size: 110px; }
+            .eyes-box { gap: 20px; margin-bottom: 10px; }
+            .eye { width: 40px; height: 40px; }
+            .pupil { width: 16px; height: 16px; }
             #merlin-sentence { 
-                font-size: 2rem; 
-                min-height: 200px; 
-                padding: 0 10px;
-                width: 100%;
+                font-size: 1.5rem !important; 
+                min-height: 100px; 
+                padding: 0 8px;
+                line-height: 1.3;
+                font-weight: 800 !important;
             }
-            .viking-size { font-size: 2.8rem; line-height: 1.3; }
+            .viking-size { 
+                font-size: 2rem !important; 
+                color: var(--magic-gold) !important; 
+                text-transform: uppercase !important;
+                font-weight: 900 !important;
+                display: block !important;
+                line-height: 1.1 !important;
+                margin: 5px 0 !important;
+                letter-spacing: 0.5px !important;
+            }
             .example-text { 
-                font-size: 1.3rem; 
-                padding: 8px 15px; 
-                margin-top: 12px;
+                font-size: 1rem; 
+                padding: 6px 10px; 
+                margin-top: 8px;
             }
-            .mill-box { margin: 20px 0; }
-            .cog { font-size: 48px; }
+            .mill-box { margin: 10px 0; }
+            .cog { font-size: 35px; }
             .symbol-grid { 
                 grid-template-columns: repeat(3, 1fr); 
-                max-height: 400px; 
-                gap: 10px;
-                padding: 12px;
+                max-height: 300px; 
+                gap: 8px;
+                padding: 10px;
                 width: 100%;
             }
-            .sym-card { padding: 8px; }
-            .sym-card .num { font-size: 1.1rem; }
-            .sym-card .icon { font-size: 2rem; }
-            #final-res { font-size: 180px; margin-top: -60px; }
+            .sym-card { padding: 6px; }
+            .sym-card .num { font-size: 0.9rem; }
+            .sym-card .icon { font-size: 1.5rem; }
+            #final-res { 
+                font-size: 120px; 
+                margin-top: -40px;
+            }
             .btn-magic { 
-                padding: 16px 40px; 
-                font-size: 1.7rem;
+                padding: 12px 25px; 
+                font-size: 1.3rem;
                 width: 90%;
-                max-width: 400px;
+                max-width: 300px;
             }
             .lang-btn { 
-                padding: 14px 30px; 
-                font-size: 1.4rem;
+                padding: 10px 16px; 
+                font-size: 1.1rem;
                 flex: 1;
-                min-width: 140px;
+                min-width: 120px;
             }
             #lang-selector { 
-                gap: 15px; 
+                gap: 10px; 
                 width: 100%;
-                padding: 0 10px;
+                padding: 0 5px;
             }
         }
 
         @media (max-width: 380px) {
-            .hat { font-size: 160px; }
-            #merlin-sentence { font-size: 1.8rem; }
-            .viking-size { font-size: 2.4rem; }
-            .example-text { font-size: 1.2rem; }
-            #final-res { font-size: 150px; }
-            .btn-magic { font-size: 1.5rem; padding: 14px 35px; }
-            .lang-btn { font-size: 1.2rem; padding: 12px 25px; }
+            .merlin-container { height: 150px; }
+            .hat { font-size: 90px; }
+            .eyes-box { gap: 15px; }
+            .eye { width: 35px; height: 35px; }
+            .pupil { width: 14px; height: 14px; }
+            #merlin-sentence { 
+                font-size: 1.3rem !important; 
+                min-height: 90px;
+            }
+            .viking-size { 
+                font-size: 1.7rem !important; 
+                line-height: 1 !important;
+            }
+            .example-text { 
+                font-size: 0.9rem; 
+                padding: 5px 8px;
+            }
+            #final-res { font-size: 100px; }
+            .btn-magic { 
+                font-size: 1.2rem; 
+                padding: 10px 20px; 
+            }
+            .lang-btn { 
+                font-size: 1rem; 
+                padding: 8px 14px; 
+            }
         }
 
         @keyframes finalPopAnim {
@@ -295,9 +354,6 @@
     </div>
 
     <script>
-        // ============================================
-        // CONFIG & CONSTANTS
-        // ============================================
         const CONFIG = {
             FLASH_DURATION: 500,
             WAIT_BASE_TIME: 1300,
@@ -308,9 +364,6 @@
             FADE_DURATION: 450
         };
 
-        // ============================================
-        // DOM ELEMENTS
-        // ============================================
         const DOM = {
             sentenceEl: document.getElementById('merlin-sentence'),
             millEl: document.getElementById('magic-mill'),
@@ -326,9 +379,6 @@
             pupil2: document.getElementById('p2')
         };
 
-        // ============================================
-        // STATE
-        // ============================================
         const STATE = {
             symbols: ['🐶', '🐯', '🦄', '🐸', '🐼', '🎃', '🚀', '🌈', '🦉', '🐕', '🎭', '🎈', '🎨', '🦋', '⭐', '🦖', '⚽', '💎', '🍄', '🔥'],
             magicEmoji: null,
@@ -341,12 +391,8 @@
             activeTimeouts: []
         };
 
-        // Initialize magic emoji
         STATE.magicEmoji = STATE.symbols[Math.floor(Math.random() * STATE.symbols.length)];
 
-        // ============================================
-        // TRANSLATIONS
-        // ============================================
         const translations = {
             bs: {
                 acts: [
@@ -400,9 +446,6 @@
             }
         };
 
-        // ============================================
-        // UTILITY FUNCTIONS
-        // ============================================
         const Utils = {
             getWaitTime(text) {
                 return CONFIG.WAIT_BASE_TIME + (text.length * CONFIG.WAIT_PER_CHAR);
@@ -421,9 +464,6 @@
             }
         };
 
-        // ============================================
-        // UI CONTROLLER
-        // ============================================
         const UI = {
             hideElement(el) {
                 if (el) el.style.display = "none";
@@ -464,9 +504,6 @@
             }
         };
 
-        // ============================================
-        // EYE ANIMATION CONTROLLER
-        // ============================================
         const EyeController = {
             start() {
                 this.stop();
@@ -508,9 +545,6 @@
             }
         };
 
-        // ============================================
-        // GAME CONTROLLER
-        // ============================================
         const Game = {
             async initialize(lang) {
                 if (!translations[lang]) {
@@ -564,11 +598,10 @@
                 
                 await UI.displayText(line.t, !!line.ex, line.ex || "");
                 
-                // Trigger number drop animation on first line
                 if (STATE.lineIndex === 0) {
                     await Utils.sleep(800);
                     DOM.numberDrop.classList.remove('dropping');
-                    void DOM.numberDrop.offsetWidth; // Force reflow
+                    void DOM.numberDrop.offsetWidth;
                     DOM.numberDrop.classList.add('dropping');
                 }
                 
@@ -679,9 +712,6 @@
             }
         };
 
-        // ============================================
-        // GLOBAL FUNCTIONS (for onclick handlers)
-        // ============================================
         function startWithLang(lang) {
             Game.initialize(lang);
         }
@@ -690,9 +720,6 @@
             Game.handleButtonClick();
         }
 
-        // ============================================
-        // INITIALIZATION
-        // ============================================
         window.addEventListener('DOMContentLoaded', () => {
             console.log('🧙‍♂️ Veliki Merlin initialized');
         });
