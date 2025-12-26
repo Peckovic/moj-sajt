@@ -17,7 +17,7 @@
         body {
             margin: 0; padding: 0;
             background: radial-gradient(circle, #1a002e, #000000);
-            font-family: Calibri, 'Trebuchet MS', sans-serif !important;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
             color: white; overflow: hidden;
             height: 100vh; width: 100vw;
             display: flex; flex-direction: column; align-items: center;
@@ -80,21 +80,12 @@
             font-size: 2.4rem; font-weight: 800; line-height: 1.2;
             opacity: 0; transition: opacity 0.5s ease;
             min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-family: Calibri, 'Trebuchet MS', sans-serif !important;
         }
 
-        .viking-size { 
-            font-size: 3.8rem !important; 
-            color: var(--magic-gold) !important; 
-            text-transform: uppercase !important;
-            font-weight: 900 !important;
-            display: block !important;
-            font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-        }
+        .viking-size { font-size: 3.8rem; color: var(--magic-gold); text-transform: uppercase; }
         .example-text {
             display: block; font-size: 1.6rem; color: #ccc; margin-top: 15px;
             background: rgba(255, 255, 255, 0.1); padding: 5px 15px; border-radius: 15px;
-            font-family: Calibri, 'Trebuchet MS', sans-serif !important;
         }
 
         .mill-box { display: none; justify-content: center; gap: 10px; margin: 15px 0; position: relative; }
@@ -112,7 +103,6 @@
             transform: translateX(-50%);
             opacity: 0;
             pointer-events: none;
-            font-family: Calibri, 'Trebuchet MS', sans-serif !important;
         }
         .number-drop.dropping {
             animation: dropIntoMill 2s ease-in forwards;
@@ -148,28 +138,24 @@
         .sym-card {
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.3);
             border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center;
-            font-family: Calibri, 'Trebuchet MS', sans-serif !important;
         }
-        .sym-card .num { font-size: 1.2rem; color: var(--magic-gold); font-family: Calibri, 'Trebuchet MS', sans-serif !important; }
+        .sym-card .num { font-size: 1.2rem; color: var(--magic-gold); }
         .sym-card .icon { font-size: 2.2rem; }
 
         #final-res { 
             font-size: 250px; display: none; 
             filter: drop-shadow(0 0 60px var(--magic-gold)); 
             line-height: 1; margin-top: -100px;
-            font-family: Calibri, 'Trebuchet MS', sans-serif !important;
         }
         .final-pop { animation: finalPopAnim 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards; }
 
         #lang-selector {
             display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; justify-content: center;
-            font-family: Calibri, 'Trebuchet MS', sans-serif !important;
         }
         .lang-btn {
             background: rgba(255,255,255,0.1); border: 2px solid var(--magic-purple);
             color: white; padding: 15px 30px; font-size: 1.5rem; border-radius: 50px;
             cursor: pointer; transition: 0.3s;
-            font-family: Calibri, 'Trebuchet MS', sans-serif !important;
         }
         .lang-btn:hover { background: var(--magic-purple); transform: scale(1.1); }
         .lang-btn:focus { outline: 3px solid var(--magic-gold); outline-offset: 2px; }
@@ -180,171 +166,87 @@
             border-radius: 80px; cursor: pointer; box-shadow: 0 8px 0 #b89b00;
             display: none; text-transform: uppercase; margin-top: 20px;
             transition: transform 0.1s, box-shadow 0.1s;
-            font-family: Calibri, 'Trebuchet MS', sans-serif !important;
         }
         .btn-magic:active { transform: translateY(4px); box-shadow: 0 4px 0 #b89b00; }
         .btn-magic:focus { outline: 3px solid white; outline-offset: 2px; }
         .btn-magic.show { display: block; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .btn-magic:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* RESPONSIVE - POPRAVLJENO ZA MOBILNE */
+        /* RESPONSIVE - FULL SCREEN MOBILE */
         @media (max-width: 768px) {
-            body { font-family: Calibri, 'Trebuchet MS', sans-serif !important; }
-            .merlin-container { height: 220px; }
-            .hat { font-size: 140px; }
-            .eyes-box { gap: 25px; margin-bottom: 15px; }
-            .eye { width: 50px; height: 50px; }
-            .pupil { width: 20px; height: 20px; }
-            #merlin-sentence { 
-                font-size: 1.8rem; 
-                min-height: 120px; 
-                padding: 0 10px;
-                line-height: 1.3;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
-            .viking-size { 
-                font-size: 2.5rem !important; 
-                color: var(--magic-gold) !important; 
-                text-transform: uppercase !important;
-                font-weight: 900 !important;
-                display: block !important;
-                line-height: 1.2 !important;
-                margin: 5px 0 !important;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
-            .example-text { 
-                font-size: 1.2rem; 
-                padding: 8px 12px; 
-                margin-top: 10px;
-                line-height: 1.3;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
-            .cog { font-size: 40px; }
-            #final-res { 
-                font-size: 150px; 
-                margin-top: -50px;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
-            .btn-magic { 
-                padding: 14px 30px; 
-                font-size: 1.5rem;
-                margin-top: 15px;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
-            .lang-btn { 
-                padding: 12px 20px; 
-                font-size: 1.2rem;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
+            .merlin-container { height: 320px; }
+            .hat { font-size: 200px; }
+            .eyes-box { gap: 45px; }
+            .eye { width: 65px; height: 65px; }
+            .pupil { width: 28px; height: 28px; }
+            #merlin-sentence { font-size: 2.2rem; min-height: 180px; padding: 0 15px; }
+            .viking-size { font-size: 3.2rem; }
+            .example-text { font-size: 1.5rem; padding: 8px 20px; }
+            .cog { font-size: 50px; }
+            #final-res { font-size: 220px; margin-top: -80px; }
+            .btn-magic { padding: 16px 40px; font-size: 1.8rem; }
+            .lang-btn { padding: 14px 28px; font-size: 1.4rem; }
         }
 
         @media (max-width: 480px) {
-            body { font-family: Calibri, 'Trebuchet MS', sans-serif !important; }
-            .merlin-container { height: 180px; }
-            .hat { font-size: 110px; }
-            .eyes-box { gap: 20px; margin-bottom: 10px; }
-            .eye { width: 40px; height: 40px; }
-            .pupil { width: 16px; height: 16px; }
+            body { padding: 10px; }
+            .merlin-container { height: 280px; }
+            .hat { font-size: 180px; }
+            .eyes-box { gap: 35px; margin-bottom: 15px; }
+            .eye { width: 60px; height: 60px; }
+            .pupil { width: 25px; height: 25px; }
             #merlin-sentence { 
-                font-size: 1.5rem !important; 
-                min-height: 100px; 
-                padding: 0 8px;
-                line-height: 1.3;
-                font-weight: 800 !important;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
+                font-size: 2rem; 
+                min-height: 200px; 
+                padding: 0 10px;
+                width: 100%;
             }
-            .viking-size { 
-                font-size: 2rem !important; 
-                color: var(--magic-gold) !important; 
-                text-transform: uppercase !important;
-                font-weight: 900 !important;
-                display: block !important;
-                line-height: 1.1 !important;
-                margin: 5px 0 !important;
-                letter-spacing: 0.5px !important;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
+            .viking-size { font-size: 2.8rem; line-height: 1.3; }
             .example-text { 
-                font-size: 1rem; 
-                padding: 6px 10px; 
-                margin-top: 8px;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
+                font-size: 1.3rem; 
+                padding: 8px 15px; 
+                margin-top: 12px;
             }
-            .mill-box { margin: 10px 0; }
-            .cog { font-size: 35px; }
+            .mill-box { margin: 20px 0; }
+            .cog { font-size: 48px; }
             .symbol-grid { 
                 grid-template-columns: repeat(3, 1fr); 
-                max-height: 300px; 
-                gap: 8px;
-                padding: 10px;
+                max-height: 400px; 
+                gap: 10px;
+                padding: 12px;
                 width: 100%;
             }
-            .sym-card { padding: 6px; font-family: Calibri, 'Trebuchet MS', sans-serif !important; }
-            .sym-card .num { font-size: 0.9rem; font-family: Calibri, 'Trebuchet MS', sans-serif !important; }
-            .sym-card .icon { font-size: 1.5rem; }
-            #final-res { 
-                font-size: 120px; 
-                margin-top: -40px;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
+            .sym-card { padding: 8px; }
+            .sym-card .num { font-size: 1.1rem; }
+            .sym-card .icon { font-size: 2rem; }
+            #final-res { font-size: 180px; margin-top: -60px; }
             .btn-magic { 
-                padding: 12px 25px; 
-                font-size: 1.3rem;
+                padding: 16px 40px; 
+                font-size: 1.7rem;
                 width: 90%;
-                max-width: 300px;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
+                max-width: 400px;
             }
             .lang-btn { 
-                padding: 10px 16px; 
-                font-size: 1.1rem;
+                padding: 14px 30px; 
+                font-size: 1.4rem;
                 flex: 1;
-                min-width: 120px;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
+                min-width: 140px;
             }
             #lang-selector { 
-                gap: 10px; 
+                gap: 15px; 
                 width: 100%;
-                padding: 0 5px;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
+                padding: 0 10px;
             }
         }
 
         @media (max-width: 380px) {
-            body { font-family: Calibri, 'Trebuchet MS', sans-serif !important; }
-            .merlin-container { height: 150px; }
-            .hat { font-size: 90px; }
-            .eyes-box { gap: 15px; }
-            .eye { width: 35px; height: 35px; }
-            .pupil { width: 14px; height: 14px; }
-            #merlin-sentence { 
-                font-size: 1.3rem !important; 
-                min-height: 90px;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
-            .viking-size { 
-                font-size: 1.7rem !important; 
-                line-height: 1 !important;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
-            .example-text { 
-                font-size: 0.9rem; 
-                padding: 5px 8px;
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
-            #final-res { 
-                font-size: 100px; 
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
-            .btn-magic { 
-                font-size: 1.2rem; 
-                padding: 10px 20px; 
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
-            .lang-btn { 
-                font-size: 1rem; 
-                padding: 8px 14px; 
-                font-family: Calibri, 'Trebuchet MS', sans-serif !important;
-            }
+            .hat { font-size: 160px; }
+            #merlin-sentence { font-size: 1.8rem; }
+            .viking-size { font-size: 2.4rem; }
+            .example-text { font-size: 1.2rem; }
+            #final-res { font-size: 150px; }
+            .btn-magic { font-size: 1.5rem; padding: 14px 35px; }
+            .lang-btn { font-size: 1.2rem; padding: 12px 25px; }
         }
 
         @keyframes finalPopAnim {
@@ -387,6 +289,9 @@
     </div>
 
     <script>
+        // ============================================
+        // CONFIG & CONSTANTS
+        // ============================================
         const CONFIG = {
             FLASH_DURATION: 500,
             WAIT_BASE_TIME: 1300,
@@ -397,6 +302,9 @@
             FADE_DURATION: 450
         };
 
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
         const DOM = {
             sentenceEl: document.getElementById('merlin-sentence'),
             millEl: document.getElementById('magic-mill'),
@@ -412,6 +320,9 @@
             pupil2: document.getElementById('p2')
         };
 
+        // ============================================
+        // STATE
+        // ============================================
         const STATE = {
             symbols: ['🐶', '🐯', '🦄', '🐸', '🐼', '🎃', '🚀', '🌈', '🦉', '🐕', '🎭', '🎈', '🎨', '🦋', '⭐', '🦖', '⚽', '💎', '🍄', '🔥'],
             magicEmoji: null,
@@ -424,8 +335,12 @@
             activeTimeouts: []
         };
 
+        // Initialize magic emoji
         STATE.magicEmoji = STATE.symbols[Math.floor(Math.random() * STATE.symbols.length)];
 
+        // ============================================
+        // TRANSLATIONS
+        // ============================================
         const translations = {
             bs: {
                 acts: [
@@ -479,6 +394,9 @@
             }
         };
 
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
         const Utils = {
             getWaitTime(text) {
                 return CONFIG.WAIT_BASE_TIME + (text.length * CONFIG.WAIT_PER_CHAR);
@@ -497,6 +415,9 @@
             }
         };
 
+        // ============================================
+        // UI CONTROLLER
+        // ============================================
         const UI = {
             hideElement(el) {
                 if (el) el.style.display = "none";
@@ -537,6 +458,9 @@
             }
         };
 
+        // ============================================
+        // EYE ANIMATION CONTROLLER
+        // ============================================
         const EyeController = {
             start() {
                 this.stop();
@@ -578,6 +502,9 @@
             }
         };
 
+        // ============================================
+        // GAME CONTROLLER
+        // ============================================
         const Game = {
             async initialize(lang) {
                 if (!translations[lang]) {
@@ -631,10 +558,11 @@
                 
                 await UI.displayText(line.t, !!line.ex, line.ex || "");
                 
+                // Trigger number drop animation on first line
                 if (STATE.lineIndex === 0) {
                     await Utils.sleep(800);
                     DOM.numberDrop.classList.remove('dropping');
-                    void DOM.numberDrop.offsetWidth;
+                    void DOM.numberDrop.offsetWidth; // Force reflow
                     DOM.numberDrop.classList.add('dropping');
                 }
                 
@@ -745,6 +673,9 @@
             }
         };
 
+        // ============================================
+        // GLOBAL FUNCTIONS (for onclick handlers)
+        // ============================================
         function startWithLang(lang) {
             Game.initialize(lang);
         }
@@ -753,6 +684,9 @@
             Game.handleButtonClick();
         }
 
+        // ============================================
+        // INITIALIZATION
+        // ============================================
         window.addEventListener('DOMContentLoaded', () => {
             console.log('🧙‍♂️ Veliki Merlin initialized');
         });
