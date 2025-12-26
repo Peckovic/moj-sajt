@@ -6,6 +6,8 @@
     <meta name="description" content="Veliki Merlin - Magična igra za čitanje misli / Great Merlin - Magic mind reading game">
     <meta property="og:title" content="Veliki Merlin / Great Merlin">
     <meta property="og:description" content="Interaktivna magična igra koja čita tvoje misli!">
+    <meta property="og:type" content="website">
+    <meta name="author" content="Your Name">
     <title>Veliki Merlin / Great Merlin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -14,10 +16,14 @@
             --magic-gold: #ffdf00;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0; padding: 0;
             background: radial-gradient(circle, #1a002e, #000000);
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             color: white; overflow: hidden;
             height: 100vh; width: 100vw;
             display: flex; flex-direction: column; align-items: center;
@@ -77,15 +83,17 @@
         }
 
         #merlin-sentence {
-            font-size: 2.4rem; font-weight: 800; line-height: 1.2;
+            font-size: 2.4rem; font-weight: 800; line-height: 1.3;
             opacity: 0; transition: opacity 0.5s ease;
             min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-transform: uppercase;
         }
 
         .viking-size { font-size: 3.8rem; color: var(--magic-gold); text-transform: uppercase; }
         .example-text {
             display: block; font-size: 1.6rem; color: #ccc; margin-top: 15px;
             background: rgba(255, 255, 255, 0.1); padding: 5px 15px; border-radius: 15px;
+            text-transform: uppercase; font-weight: 700;
         }
 
         .mill-box { display: none; justify-content: center; gap: 10px; margin: 15px 0; position: relative; }
@@ -353,8 +361,8 @@
                             { t: "On će ga samleti u prah...", auto: true },
                             { t: "I stvoriti tvoj <br><span class='viking-size'>NOVI MAGIČNI BROJ!</span>", auto: true },
                             { t: "Hajde, sada da računamo", auto: true },
-                            { t: "Saberi cifre tvog broja", ex: "Primer: 12 -> 1+2 = 3", auto: false, b: "DALJE ➡️" },
-                            { t: "I sad taj zbir oduzmi od tvog broja", ex: "Primer: 12 - 3 = 9", auto: false, b: "DALJE ➡️" },
+                            { t: "Saberi cifre tvog broja", ex: "PRIMER: 12 → 1+2 = 3", auto: false, b: "DALJE ➡️" },
+                            { t: "I sad taj zbir oduzmi od tvog broja", ex: "PRIMER: 12 - 3 = 9", auto: false, b: "DALJE ➡️" },
                             { t: "Tako je! Mlin je završio posao...", auto: true },
                             { t: "I zapamti taj novi broj!", auto: false, b: "ZAPAMTIO SAM! ✨" }
                         ]
@@ -378,8 +386,8 @@
                             { t: "It will grind it into dust...", auto: true },
                             { t: "And create your <br><span class='viking-size'>NEW MAGIC NUMBER!</span>", auto: true },
                             { t: "Now, let's calculate", auto: true },
-                            { t: "Add the digits of your number", ex: "Example: 12 -> 1+2 = 3", auto: false, b: "NEXT ➡️" },
-                            { t: "Now subtract that sum from your number", ex: "Example: 12 - 3 = 9", auto: false, b: "NEXT ➡️" },
+                            { t: "Add the digits of your number", ex: "EXAMPLE: 12 → 1+2 = 3", auto: false, b: "NEXT ➡️" },
+                            { t: "Now subtract that sum from your number", ex: "EXAMPLE: 12 - 3 = 9", auto: false, b: "NEXT ➡️" },
                             { t: "Great! The mill has finished its job...", auto: true },
                             { t: "Now remember that new number!", auto: false, b: "I REMEMBER IT! ✨" }
                         ]
