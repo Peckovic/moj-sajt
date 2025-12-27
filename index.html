@@ -96,6 +96,58 @@
             text-transform: uppercase; font-weight: 700;
         }
 
+        .math-demo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--magic-gold);
+            margin-top: 20px;
+            min-height: 80px;
+        }
+
+        .math-demo .digit {
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+            animation: digitPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .math-demo .operator {
+            font-size: 3rem;
+            animation: operatorPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
+        }
+
+        .math-demo .equals {
+            font-size: 2.5rem;
+            animation: operatorPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both;
+        }
+
+        .math-demo .result {
+            font-size: 3.5rem;
+            color: #00ff00;
+            animation: resultPop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.9s both;
+        }
+
+        @keyframes digitPop {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes operatorPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes resultPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         .mill-box { display: none; justify-content: center; gap: 10px; margin: 15px 0; position: relative; }
         .cog { font-size: 55px; color: var(--magic-gold); }
         .cog-right { animation: rotateMlin 2s infinite linear; }
@@ -361,8 +413,8 @@
                             { t: "On će ga samleti u prah...", auto: true },
                             { t: "I stvoriti tvoj <br><span class='viking-size'>NOVI MAGIČNI BROJ!</span>", auto: true },
                             { t: "Hajde, sada da računamo", auto: true },
-                            { t: "Saberi cifre tvog broja", ex: "PRIMER: 12 → 1+2 = 3", auto: false, b: "DALJE ➡️" },
-                            { t: "I sad taj zbir oduzmi od tvog broja", ex: "PRIMER: 12 - 3 = 9", auto: false, b: "DALJE ➡️" },
+                            { t: "Saberi cifre tvog broja", demo: "addition", auto: false, b: "DALJE ➡️" },
+                            { t: "I sad taj zbir oduzmi od tvog broja", demo: "subtraction", auto: false, b: "DALJE ➡️" },
                             { t: "Tako je! Mlin je završio posao...", auto: true },
                             { t: "Dobro si uradio!", auto: true },
                             { t: "I zapamti taj novi broj!", auto: false, b: "ZAPAMTIO SAM! ✨" }
@@ -387,8 +439,8 @@
                             { t: "It will grind it into dust...", auto: true },
                             { t: "And create your <br><span class='viking-size'>NEW MAGIC NUMBER!</span>", auto: true },
                             { t: "Now, let's calculate", auto: true },
-                            { t: "Add the digits of your number", ex: "EXAMPLE: 12 → 1+2 = 3", auto: false, b: "NEXT ➡️" },
-                            { t: "Now subtract that sum from your number", ex: "EXAMPLE: 12 - 3 = 9", auto: false, b: "NEXT ➡️" },
+                            { t: "Add the digits of your number", demo: "addition", auto: false, b: "NEXT ➡️" },
+                            { t: "Now subtract that sum from your number", demo: "subtraction", auto: false, b: "NEXT ➡️" },
                             { t: "Great! The mill has finished its job...", auto: true },
                             { t: "Well done!", auto: true },
                             { t: "Now remember that new number!", auto: false, b: "I REMEMBER IT! ✨" }
@@ -463,6 +515,41 @@
                 if (hasExample) {
                     content += `<span class="example-text">${exampleText}</span>`;
                 }
+                DOM.sentenceEl.innerHTML = content;
+                await this.fadeIn(DOM.sentenceEl);
+            },
+
+            async displayMathDemo(text, demoType) {
+                await this.fadeOut(DOM.sentenceEl);
+                
+                let content = `<span>${text}</span>`;
+                
+                if (demoType === "addition") {
+                    content += `
+                        <div class="math-demo">
+                            <span class="digit">1</span>
+                            <span class="digit">2</span>
+                            <span class="operator">→</span>
+                            <span class="digit">1</span>
+                            <span class="operator">+</span>
+                            <span class="digit">2</span>
+                            <span class="equals">=</span>
+                            <span class="result">3</span>
+                        </div>
+                    `;
+                } else if (demoType === "subtraction") {
+                    content += `
+                        <div class="math-demo">
+                            <span class="digit">1</span>
+                            <span class="digit">2</span>
+                            <span class="operator">−</span>
+                            <span class="digit">3</span>
+                            <span class="equals">=</span>
+                            <span class="result">9</span>
+                        </div>
+                    `;
+                }
+                
                 DOM.sentenceEl.innerHTML = content;
                 await this.fadeIn(DOM.sentenceEl);
             }
@@ -566,7 +653,12 @@
                 const act = STATE.chosenActs[STATE.currentAct];
                 const line = act.lines[STATE.lineIndex];
                 
-                await UI.displayText(line.t, !!line.ex, line.ex || "");
+                // Display text with math demo if available
+                if (line.demo) {
+                    await UI.displayMathDemo(line.t, line.demo);
+                } else {
+                    await UI.displayText(line.t, !!line.ex, line.ex || "");
+                }
                 
                 // Trigger number drop animation on first line
                 if (STATE.lineIndex === 0) {
@@ -577,9 +669,11 @@
                 }
                 
                 if (line.auto) {
-                    // Hide button and mill when auto text is playing
+                    // Hide button when auto text is playing, but keep mill until line 6 (index 6)
                     UI.hideButton();
-                    UI.hideElement(DOM.millEl);
+                    if (STATE.lineIndex >= 6) {
+                        UI.hideElement(DOM.millEl);
+                    }
                     await Utils.sleep(Utils.getWaitTime(line.t));
                     STATE.lineIndex++;
                     if (STATE.lineIndex < act.lines.length) {
