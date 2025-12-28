@@ -2,801 +2,324 @@
 <html lang="sr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Veliki Merlin - Magična igra za čitanje misli / Great Merlin - Magic mind reading game">
-    <meta property="og:title" content="Veliki Merlin / Great Merlin">
-    <meta property="og:description" content="Interaktivna magična igra koja čita tvoje misli!">
-    <meta property="og:type" content="website">
-    <meta name="author" content="Your Name">
-    <title>Veliki Merlin / Great Merlin</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veliki Merlin - Magija Brojeva</title>
     <style>
-        :root {
-            --magic-purple: #9d4edd;
-            --magic-gold: #ffdf00;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            margin: 0; padding: 0;
-            background: radial-gradient(circle, #1a002e, #000000);
-            font-family: Arial, Helvetica, sans-serif;
-            color: white; overflow: hidden;
-            height: 100vh; width: 100vw;
-            display: flex; flex-direction: column; align-items: center;
-            transition: background 2s ease;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: radial-gradient(circle at center, #1a0033, #000);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 20px;
         }
 
-        body.magic-active { background: radial-gradient(circle, #4b0082, #000000); }
-
-        #flash-bang {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; opacity: 0; pointer-events: none; z-index: 100;
-        }
-        .flash-anim { animation: flashEffect 0.5s ease-out; }
-        @keyframes flashEffect {
-            0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; }
-        }
-
-        .merlin-container {
-            position: relative; width: 100%; height: 280px;
-            display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-            transition: opacity 0.4s ease, transform 0.4s ease;
+        .wizard-container {
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px;
         }
 
-        .hat {
-            font-size: 220px; color: var(--magic-purple);
-            filter: drop-shadow(0 0 30px var(--magic-purple));
-            animation: float 3s infinite ease-in-out;
-            position: absolute; top: 10px;
+        .wizard-hat {
+            font-size: 220px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 50px #9d4edd);
+            margin-bottom: 5px;
+            line-height: 1;
+            user-select: none;
         }
 
-        .eyes-box { display: flex; gap: 40px; margin-bottom: 20px; z-index: 5; }
-        .eye {
-            width: 70px; height: 70px; background: white; border-radius: 50%;
-            position: relative; border: 5px solid #000; overflow: hidden;
-        }
-        .eye::after {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 0%;
-            background: var(--magic-purple); z-index: 10;
-        }
-        .blinking .eye::after { animation: blinkAnim 3.5s infinite; }
-        .pupil {
-            width: 30px; height: 30px; background: #000; border-radius: 50%;
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        .content-area {
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin: 20px 0;
+            width: 100%;
+            gap: 20px;
         }
 
-        .rolling-eyes .pupil { animation: rollAnim 0.6s infinite linear; }
-        @keyframes rollAnim {
-            from { transform: translate(-50%, -50%) rotate(0deg) translateY(-20px) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg) translateY(-20px) rotate(-360deg); }
-        }
-        .magic-eyes .eye { box-shadow: 0 0 30px var(--magic-gold); border-color: var(--magic-gold); }
-
-        .interaction-zone {
-            width: 95%; max-width: 800px;
-            display: flex; flex-direction: column; align-items: center;
-            text-align: center; margin-top: 5px;
-        }
-
-        #merlin-sentence {
-            font-size: 2.4rem; font-weight: 800; line-height: 1.3;
-            opacity: 0; transition: opacity 0.5s ease;
-            min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-transform: uppercase;
+        .number-box {
+            background: rgba(157, 78, 221, 0.2);
+            border: 5px solid #9d4edd;
+            border-radius: 30px;
+            padding: 30px 50px;
+            min-width: 400px;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 50px rgba(157, 78, 221, 0.4);
+            animation: pop 0.5s ease;
         }
 
-        .viking-size { font-size: 3.8rem; color: var(--magic-gold); text-transform: uppercase; }
-        .example-text {
-            display: block; font-size: 1.6rem; color: #ccc; margin-top: 15px;
-            background: rgba(255, 255, 255, 0.1); padding: 5px 15px; border-radius: 15px;
-            text-transform: uppercase; font-weight: 700;
-        }
-
-        .math-demo {
+        .number-display {
+            font-size: 7rem;
+            font-weight: 900;
+            color: #ffd700;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--magic-gold);
-            margin-top: 20px;
-            min-height: 80px;
+            text-shadow: 0 0 30px #ffd700;
         }
 
-        .math-demo .digit {
-            display: inline-block;
-            min-width: 40px;
-            text-align: center;
-            animation: digitPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .math-demo .operator {
-            font-size: 3rem;
-            animation: operatorPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
-        }
-
-        .math-demo .equals {
-            font-size: 2.5rem;
-            animation: operatorPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both;
-        }
-
-        .math-demo .result {
-            font-size: 3.5rem;
-            color: #00ff00;
-            animation: resultPop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.9s both;
-        }
-
-        @keyframes digitPop {
-            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        @keyframes operatorPop {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes resultPop {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.5); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .mill-box { display: none; justify-content: center; gap: 10px; margin: 15px 0; position: relative; }
-        .cog { font-size: 55px; color: var(--magic-gold); }
-        .cog-right { animation: rotateMlin 2s infinite linear; }
-        .cog-left { animation: rotateMlinRev 2s infinite linear; margin-right: -10px; }
-
-        .number-drop {
-            position: absolute;
-            font-size: 60px;
+        .digit { animation: pop 0.5s ease forwards; }
+        .operator { font-size: 5rem; color: #f472b6; }
+        .equals { font-size: 5rem; color: #4ade80; }
+        
+        .message {
+            font-size: 2.2rem;
             font-weight: bold;
-            color: var(--magic-gold);
-            top: -80px;
-            left: 50%;
-            transform: translateX(-50%);
+            text-align: center;
+            line-height: 1.4;
             opacity: 0;
-            pointer-events: none;
+            transition: opacity 0.6s ease;
+            max-width: 800px;
+            min-height: 100px;
         }
-        .number-drop.dropping {
-            animation: dropIntoMill 2s ease-in forwards;
-        }
-        @keyframes dropIntoMill {
-            0% {
-                opacity: 1;
-                top: -80px;
-                transform: translateX(-50%) scale(1) rotate(0deg);
-            }
-            50% {
-                top: 20px;
-                transform: translateX(-50%) scale(1.2) rotate(180deg);
-            }
-            80% {
-                opacity: 1;
-                top: 30px;
-                transform: translateX(-50%) scale(0.8) rotate(360deg);
-            }
-            100% {
-                opacity: 0;
-                top: 40px;
-                transform: translateX(-50%) scale(0) rotate(540deg);
-            }
-        }
+        .message.show { opacity: 1; }
+        .highlight { color: #ffd700; font-size: 3rem; display: block; margin-top: 10px; }
 
-        .symbol-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 12px; max-height: 350px; overflow-y: auto;
-            background: rgba(0,0,0,0.6); padding: 15px; border-radius: 20px;
-            border: 3px solid var(--magic-purple); display: none;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+            gap: 10px;
+            max-width: 800px;
+            margin: 10px auto;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            max-height: 350px;
+            overflow-y: auto;
+            border: 1px solid rgba(157, 78, 221, 0.3);
         }
-        .sym-card {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.3);
-            border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center;
+        .grid-item {
+            background: rgba(157, 78, 221, 0.15);
+            border: 1px solid rgba(157, 78, 221, 0.4);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .sym-card .num { font-size: 1.2rem; color: var(--magic-gold); }
-        .sym-card .icon { font-size: 2.2rem; }
+        .grid-number { color: #ffd700; font-weight: bold; font-size: 0.9rem; }
+        .grid-symbol { font-size: 2.2rem; }
+        
+        .button {
+            background: #ffd700;
+            color: #000;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #b89b00;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .button:active { transform: translateY(3px); box-shadow: 0 3px 0 #b89b00; }
 
-        #final-res { 
-            font-size: 250px; display: none; 
-            filter: drop-shadow(0 0 60px var(--magic-gold)); 
-            line-height: 1; margin-top: -100px;
-        }
-        .final-pop { animation: finalPopAnim 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards; }
-
-        #lang-selector {
-            display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; justify-content: center;
-        }
         .lang-btn {
-            background: rgba(255,255,255,0.1); border: 2px solid var(--magic-purple);
-            color: white; padding: 15px 30px; font-size: 1.5rem; border-radius: 50px;
-            cursor: pointer; transition: 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #9d4edd;
+            color: white;
+            padding: 15px 35px;
+            font-size: 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
         }
-        .lang-btn:hover { background: var(--magic-purple); transform: scale(1.1); }
-        .lang-btn:focus { outline: 3px solid var(--magic-gold); outline-offset: 2px; }
+        .lang-btn:hover { background: #9d4edd; transform: scale(1.05); box-shadow: 0 0 20px #9d4edd; }
 
-        .btn-magic {
-            background: var(--magic-gold); color: #000; border: none;
-            padding: 18px 45px; font-size: 2rem; font-weight: 900;
-            border-radius: 80px; cursor: pointer; box-shadow: 0 8px 0 #b89b00;
-            display: none; text-transform: uppercase; margin-top: 20px;
-            transition: transform 0.1s, box-shadow 0.1s;
-        }
-        .btn-magic:active { transform: translateY(4px); box-shadow: 0 4px 0 #b89b00; }
-        .btn-magic:focus { outline: 3px solid white; outline-offset: 2px; }
-        .btn-magic.show { display: block; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .btn-magic:disabled { opacity: 0.6; cursor: not-allowed; }
+        .thinking-dots { font-size: 2.2rem; color: #38bdf8; letter-spacing: 12px; animation: blink 1.5s infinite; margin-top: 15px; }
+        
+        @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .hidden { display: none !important; }
 
-        /* RESPONSIVE - FULL SCREEN MOBILE */
-        @media (max-width: 768px) {
-            .merlin-container { height: 320px; }
-            .hat { font-size: 200px; }
-            .eyes-box { gap: 45px; }
-            .eye { width: 65px; height: 65px; }
-            .pupil { width: 28px; height: 28px; }
-            #merlin-sentence { font-size: 2.2rem; min-height: 180px; padding: 0 15px; }
-            .viking-size { font-size: 3.2rem; }
-            .example-text { font-size: 1.5rem; padding: 8px 20px; }
-            .cog { font-size: 50px; }
-            #final-res { font-size: 220px; margin-top: -80px; }
-            .btn-magic { padding: 16px 40px; font-size: 1.8rem; }
-            .lang-btn { padding: 14px 28px; font-size: 1.4rem; }
-        }
-
-        @media (max-width: 480px) {
-            body { padding: 10px; }
-            .merlin-container { height: 280px; }
-            .hat { font-size: 180px; }
-            .eyes-box { gap: 35px; margin-bottom: 15px; }
-            .eye { width: 60px; height: 60px; }
-            .pupil { width: 25px; height: 25px; }
-            #merlin-sentence { 
-                font-size: 2rem; 
-                min-height: 200px; 
-                padding: 0 10px;
-                width: 100%;
-            }
-            .viking-size { font-size: 2.8rem; line-height: 1.3; }
-            .example-text { 
-                font-size: 1.3rem; 
-                padding: 8px 15px; 
-                margin-top: 12px;
-            }
-            .mill-box { margin: 20px 0; }
-            .cog { font-size: 48px; }
-            .symbol-grid { 
-                grid-template-columns: repeat(3, 1fr); 
-                max-height: 400px; 
-                gap: 10px;
-                padding: 12px;
-                width: 100%;
-            }
-            .sym-card { padding: 8px; }
-            .sym-card .num { font-size: 1.1rem; }
-            .sym-card .icon { font-size: 2rem; }
-            #final-res { font-size: 180px; margin-top: -60px; }
-            .btn-magic { 
-                padding: 16px 40px; 
-                font-size: 1.7rem;
-                width: 90%;
-                max-width: 400px;
-            }
-            .lang-btn { 
-                padding: 14px 30px; 
-                font-size: 1.4rem;
-                flex: 1;
-                min-width: 140px;
-            }
-            #lang-selector { 
-                gap: 15px; 
-                width: 100%;
-                padding: 0 10px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .hat { font-size: 160px; }
-            #merlin-sentence { font-size: 1.8rem; }
-            .viking-size { font-size: 2.4rem; }
-            .example-text { font-size: 1.2rem; }
-            #final-res { font-size: 150px; }
-            .btn-magic { font-size: 1.5rem; padding: 14px 35px; }
-            .lang-btn { font-size: 1.2rem; padding: 12px 25px; }
-        }
-
-        @keyframes finalPopAnim {
-            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
-        @keyframes blinkAnim { 0%, 90%, 100% { height: 0%; } 93%, 97% { height: 100%; } }
-        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
-        @keyframes rotateMlin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes rotateMlinRev { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+        /* Scrollbar stil */
+        .grid::-webkit-scrollbar { width: 8px; }
+        .grid::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        .grid::-webkit-scrollbar-thumb { background: #9d4edd; border-radius: 10px; }
     </style>
 </head>
 <body>
+    <div class="wizard-container">
+        <div class="wizard-hat">🧙‍♂️</div>
 
-    <div id="flash-bang"></div>
+        <div id="langSection">
+            <div style="font-size: 2.5rem; font-weight: bold; color: #ffd700; margin-bottom: 25px;">VELIKI MERLIN</div>
+            <button class="lang-btn" onclick="startIntro('bs')">🇧🇦 BOSANSKI</button>
+            <button class="lang-btn" onclick="startIntro('en')">🇺🇸 ENGLISH</button>
+        </div>
 
-    <div id="merlin-character" class="merlin-container">
-        <div class="hat"><i class="fas fa-hat-wizard"></i></div>
-        <div id="merlin-eyes-box" class="eyes-box blinking">
-            <div class="eye"><div id="p1" class="pupil"></div></div>
-            <div class="eye"><div id="p2" class="pupil"></div></div>
+        <div id="content" class="content-area hidden">
+            <div id="merlinMessage" class="message"></div>
         </div>
-    </div>
-
-    <div class="interaction-zone">
-        <div id="lang-selector" role="navigation" aria-label="Language selection">
-            <button class="lang-btn" onclick="startWithLang('bs')" aria-label="Choose Bosnian language">🇧🇦 Bosanski</button>
-            <button class="lang-btn" onclick="startWithLang('en')" aria-label="Choose English language">🇺🇸 English</button>
-        </div>
-        <div id="merlin-sentence" role="status" aria-live="polite" aria-atomic="true"></div>
-        <div id="magic-mill" class="mill-box" aria-hidden="true">
-            <div class="number-drop" id="number-drop">X</div>
-            <i class="fas fa-cog cog cog-left"></i>
-            <i class="fas fa-cog cog cog-right"></i>
-        </div>
-        <div id="grid-box" class="symbol-grid" role="grid" aria-label="Number and symbol grid"></div>
-        <div id="final-res" role="alert" aria-live="assertive"></div>
-        <button id="main-btn" class="btn-magic" onclick="handleBtnClick()" aria-label="Continue"></button>
+        
+        <button id="actionBtn" class="button hidden" onclick="handleLogic()"></button>
+        
+        <div class="thinking-dots hidden" id="thinkDots">...</div>
     </div>
 
     <script>
-        // ============================================
-        // CONFIG & CONSTANTS
-        // ============================================
-        const CONFIG = {
-            FLASH_DURATION: 500,
-            WAIT_BASE_TIME: 1300,
-            WAIT_PER_CHAR: 70,
-            BUTTON_DELAY: 2000,
-            GRID_SIZE: 100,
-            EYE_UPDATE_INTERVAL: 2000,
-            FADE_DURATION: 450
-        };
+        const symbols = ['🐶', '🐯', '🦄', '🐸', '🐼', '🚀', '🌈', '🦉', '💎', '🔥', '🦁', '🐢', '🦊', '🐨', '🧞', '🎭', '🍀', '🍎', '🍄', '🌍'];
+        let magicSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+        let step = 0;
+        let lang = 'bs';
 
-        // ============================================
-        // DOM ELEMENTS
-        // ============================================
-        const DOM = {
-            sentenceEl: document.getElementById('merlin-sentence'),
-            millEl: document.getElementById('magic-mill'),
-            numberDrop: document.getElementById('number-drop'),
-            btn: document.getElementById('main-btn'),
-            grid: document.getElementById('grid-box'),
-            finalRes: document.getElementById('final-res'),
-            eyesBox: document.getElementById('merlin-eyes-box'),
-            flash: document.getElementById('flash-bang'),
-            merlinChar: document.getElementById('merlin-character'),
-            langSelector: document.getElementById('lang-selector'),
-            pupil1: document.getElementById('p1'),
-            pupil2: document.getElementById('p2')
-        };
-
-        // ============================================
-        // STATE
-        // ============================================
-        const STATE = {
-            symbols: ['🐶', '🐯', '🦄', '🐸', '🐼', '🎃', '🚀', '🌈', '🦉', '🐕', '🎭', '🎈', '🎨', '🦋', '⭐', '🦖', '⚽', '💎', '🍄', '🔥'],
-            magicEmoji: null,
-            currentAct: 0,
-            lineIndex: 0,
-            isRolling: false,
-            chosenActs: [],
-            replayText: "",
-            eyeInterval: null,
-            activeTimeouts: []
-        };
-
-        // Initialize magic emoji
-        STATE.magicEmoji = STATE.symbols[Math.floor(Math.random() * STATE.symbols.length)];
-
-        // ============================================
-        // TRANSLATIONS
-        // ============================================
-        const translations = {
+        const texts = {
             bs: {
-                acts: [
-                    { lines: ["Ššššš...", "Ja sam <span class='viking-size'>VELIKI</span> Merlin!", "Gledaću u tvoje misli!"], btn: "KRENI! ▶️" },
-                    { lines: ["Zamisli jedan <span class='viking-size'>DVOCIFRENI</span> broj."], btn: "ZAMISLIO SAM! 🤔", needsWait: true },
-                    {
-                        isMath: true,
-                        lines: [
-                            { t: "Sada taj broj ubaci u moj <br><span class='viking-size'>MAGIČNI MLIN</span>", auto: true },
-                            { t: "On će ga samleti u prah...", auto: true },
-                            { t: "I stvoriti tvoj <br><span class='viking-size'>NOVI MAGIČNI BROJ!</span>", auto: true },
-                            { t: "Hajde, sada da računamo", auto: true },
-                            { t: "Saberi cifre tvog broja", demo: "addition", auto: false, b: "DALJE ➡️" },
-                            { t: "I sad taj zbir oduzmi od tvog broja", demo: "subtraction", auto: false, b: "DALJE ➡️" },
-                            { t: "Tako je! Mlin je završio posao...", auto: true },
-                            { t: "Dobro si uradio!", auto: true },
-                            { t: "I zapamti taj novi broj!", auto: false, b: "ZAPAMTIO SAM! ✨" }
-                        ]
-                    },
-                    { lines: ["Pogledaj u <span class='viking-size'>VELIKI</span> zid!", "Zapamti sliku u kockici <br>pored tvog broja."], btn: "ZAPAMTIO SAM! 🖼️", showGrid: true },
-                    {
-                        isVision: true,
-                        lines: ["A sada... TIŠINA.", "Vaše misli su <span class='viking-size'>OGROMNE</span>!", "Vidim...", "Vidiim..."]
-                    }
+                intro: [
+                    "Pozdrav! Ja sam <span class='highlight'>VELIKI MERLIN</span>!",
+                    "Vjekovima sam čuvao tajne brojeva i zvijezda...",
+                    "Danas ću pročitati tvoje misli kroz magičnu matematiku.",
+                    "Spremi se, jer magija počinje SADA!"
                 ],
-                replay: "PONOVO 🔥"
+                step1: "Zamisli bilo koji dvocifren broj:",
+                step2: "Sada razdvoji cifre i saberi ih:",
+                step3: "Sada taj zbir oduzmi od tvog početnog broja:",
+                step4: "Zapamti sliku pored tvog novog broja:",
+                step5: "Gledaj duboko u tu sliku...",
+                reveal: "MOĆ BROJEVA KAŽE DA JE TVOJA SLIKA...",
+                btn2: "ZAMISLIO SAM! 🤔",
+                btn3: "SABRAO SAM! ➕",
+                btn4: "ODUZEO SAM! ✨",
+                btn5: "ZAPAMTIO SAM! 🖼️",
+                btnAgain: "PONOVO! 🔥"
             },
             en: {
-                acts: [
-                    { lines: ["Shhh...", "I am the <span class='viking-size'>GREAT</span> Merlin!", "I will look into your mind!"], btn: "START! ▶️" },
-                    { lines: ["Think of a <span class='viking-size'>TWO-DIGIT</span> number."], btn: "I HAVE IT! 🤔", needsWait: true },
-                    {
-                        isMath: true,
-                        lines: [
-                            { t: "Now throw that number into my <br><span class='viking-size'>MAGIC MILL</span>", auto: true },
-                            { t: "It will grind it into dust...", auto: true },
-                            { t: "And create your <br><span class='viking-size'>NEW MAGIC NUMBER!</span>", auto: true },
-                            { t: "Now, let's calculate", auto: true },
-                            { t: "Add the digits of your number", demo: "addition", auto: false, b: "NEXT ➡️" },
-                            { t: "Now subtract that sum from your number", demo: "subtraction", auto: false, b: "NEXT ➡️" },
-                            { t: "Great! The mill has finished its job...", auto: true },
-                            { t: "Well done!", auto: true },
-                            { t: "Now remember that new number!", auto: false, b: "I REMEMBER IT! ✨" }
-                        ]
-                    },
-                    { lines: ["Look at the <span class='viking-size'>BIG</span> wall!", "Remember the image in the box <br>next to your number."], btn: "I GOT IT! 🖼️", showGrid: true },
-                    {
-                        isVision: true,
-                        lines: ["And now... SILENCE.", "Your thoughts are <span class='viking-size'>HUGE</span>!", "I see it...", "I seeee it..."]
-                    }
+                intro: [
+                    "Greetings! I am the <span class='highlight'>GREAT MERLIN</span>!",
+                    "For centuries, I've guarded the secrets of numbers...",
+                    "Today, I shall read your mind through magic math.",
+                    "Get ready, for the magic begins NOW!"
                 ],
-                replay: "REPLAY 🔥"
+                step1: "Think of any two-digit number:",
+                step2: "Split the digits and add them together:",
+                step3: "Now subtract that sum from your initial number:",
+                step4: "Remember the picture next to your new number:",
+                step5: "Look deeply into that picture...",
+                reveal: "THE POWER OF NUMBERS SAYS YOUR PICTURE IS...",
+                btn2: "GOT IT! 🤔",
+                btn3: "ADDED! ➕",
+                btn4: "DONE! ✨",
+                btn5: "REMEMBERED! 🖼️",
+                btnAgain: "AGAIN! 🔥"
             }
         };
 
-        // ============================================
-        // UTILITY FUNCTIONS
-        // ============================================
-        const Utils = {
-            getWaitTime(text) {
-                return CONFIG.WAIT_BASE_TIME + (text.length * CONFIG.WAIT_PER_CHAR);
-            },
+        const content = document.getElementById('content');
+        const btn = document.getElementById('actionBtn');
+        const msg = document.getElementById('merlinMessage');
+        const dots = document.getElementById('thinkDots');
 
-            async sleep(ms) {
-                return new Promise(resolve => {
-                    const timeout = setTimeout(resolve, ms);
-                    STATE.activeTimeouts.push(timeout);
-                });
-            },
+        function startIntro(selectedLang) {
+            lang = selectedLang;
+            document.getElementById('langSection').classList.add('hidden');
+            content.classList.remove('hidden');
+            dots.classList.remove('hidden');
+            
+            let introIdx = 0;
+            const introSequence = texts[lang].intro;
 
-            clearAllTimeouts() {
-                STATE.activeTimeouts.forEach(timeout => clearTimeout(timeout));
-                STATE.activeTimeouts = [];
-            }
-        };
-
-        // ============================================
-        // UI CONTROLLER
-        // ============================================
-        const UI = {
-            hideElement(el) {
-                if (el) el.style.display = "none";
-            },
-
-            showElement(el, display = "block") {
-                if (el) el.style.display = display;
-            },
-
-            fadeOut(el, duration = CONFIG.FADE_DURATION) {
-                if (el) el.style.opacity = "0";
-                return Utils.sleep(duration);
-            },
-
-            async fadeIn(el, duration = CONFIG.FADE_DURATION) {
-                if (el) el.style.opacity = "1";
-                return Utils.sleep(duration);
-            },
-
-            showButton(text, disabled = false) {
-                DOM.btn.innerText = text;
-                DOM.btn.classList.add('show');
-                DOM.btn.disabled = disabled;
-            },
-
-            hideButton() {
-                DOM.btn.classList.remove('show');
-            },
-
-            async displayText(text, hasExample = false, exampleText = "") {
-                await this.fadeOut(DOM.sentenceEl);
-                let content = `<span>${text}</span>`;
-                if (hasExample) {
-                    content += `<span class="example-text">${exampleText}</span>`;
-                }
-                DOM.sentenceEl.innerHTML = content;
-                await this.fadeIn(DOM.sentenceEl);
-            },
-
-            async displayMathDemo(text, demoType) {
-                await this.fadeOut(DOM.sentenceEl);
-                
-                let content = `<span>${text}</span>`;
-                
-                if (demoType === "addition") {
-                    content += `
-                        <div class="math-demo">
-                            <span class="digit">1</span>
-                            <span class="digit">2</span>
-                            <span class="operator">→</span>
-                            <span class="digit">1</span>
-                            <span class="operator">+</span>
-                            <span class="digit">2</span>
-                            <span class="equals">=</span>
-                            <span class="result">3</span>
-                        </div>
-                    `;
-                } else if (demoType === "subtraction") {
-                    content += `
-                        <div class="math-demo">
-                            <span class="digit">1</span>
-                            <span class="digit">2</span>
-                            <span class="operator">−</span>
-                            <span class="digit">3</span>
-                            <span class="equals">=</span>
-                            <span class="result">9</span>
-                        </div>
-                    `;
-                }
-                
-                DOM.sentenceEl.innerHTML = content;
-                await this.fadeIn(DOM.sentenceEl);
-            }
-        };
-
-        // ============================================
-        // EYE ANIMATION CONTROLLER
-        // ============================================
-        const EyeController = {
-            start() {
-                this.stop();
-                STATE.eyeInterval = setInterval(() => {
-                    if (!STATE.isRolling) {
-                        this.moveEyes();
-                    }
-                }, CONFIG.EYE_UPDATE_INTERVAL);
-            },
-
-            stop() {
-                if (STATE.eyeInterval) {
-                    clearInterval(STATE.eyeInterval);
-                    STATE.eyeInterval = null;
-                }
-            },
-
-            moveEyes() {
-                if (!DOM.pupil1 || !DOM.pupil2) return;
-                
-                const x = (Math.random() - 0.5) * 20;
-                const y = (Math.random() - 0.5) * 10;
-                const transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-                
-                DOM.pupil1.style.transform = transform;
-                DOM.pupil2.style.transform = transform;
-            },
-
-            setMagicMode(isActive) {
-                if (isActive) {
-                    DOM.eyesBox.classList.remove('blinking');
-                    DOM.eyesBox.classList.add('magic-eyes', 'rolling-eyes');
-                    STATE.isRolling = true;
+            function nextIntroLine() {
+                if (introIdx < introSequence.length) {
+                    msg.classList.remove('show');
+                    setTimeout(() => {
+                        msg.innerHTML = introSequence[introIdx];
+                        msg.classList.add('show');
+                        introIdx++;
+                        setTimeout(nextIntroLine, 3000);
+                    }, 600);
                 } else {
-                    DOM.eyesBox.classList.add('blinking');
-                    DOM.eyesBox.classList.remove('magic-eyes', 'rolling-eyes');
-                    STATE.isRolling = false;
+                    startTrick();
                 }
             }
-        };
-
-        // ============================================
-        // GAME CONTROLLER
-        // ============================================
-        const Game = {
-            async initialize(lang) {
-                if (!translations[lang]) {
-                    console.error('Unsupported language:', lang);
-                    return;
-                }
-
-                UI.hideElement(DOM.langSelector);
-                STATE.chosenActs = translations[lang].acts;
-                STATE.replayText = translations[lang].replay;
-                STATE.currentAct = 0;
-                
-                EyeController.start();
-                await this.playAct(0);
-            },
-
-            async playAct(actIndex) {
-                try {
-                    UI.hideButton();
-                    const act = STATE.chosenActs[actIndex];
-                    STATE.lineIndex = 0;
-                    
-                    UI.hideElement(DOM.millEl);
-                    UI.hideElement(DOM.grid);
-                    UI.showElement(DOM.sentenceEl, "flex");
-
-                    if (act.isMath) {
-                        UI.showElement(DOM.millEl, "flex");
-                        await this.runMathSequence();
-                    } else if (act.isVision) {
-                        await this.runVisionSequence(act);
-                    } else {
-                        await this.runStandardSequence(act);
-                    }
-                } catch (error) {
-                    console.error('Error in playAct:', error);
-                }
-            },
-
-            async runStandardSequence(act) {
-                for (let i = 0; i < act.lines.length; i++) {
-                    await UI.displayText(act.lines[i]);
-                    await Utils.sleep(Utils.getWaitTime(act.lines[i]));
-                }
-                this.showActButton(act);
-            },
-
-            async runMathSequence() {
-                const act = STATE.chosenActs[STATE.currentAct];
-                const line = act.lines[STATE.lineIndex];
-                
-                // Display text with math demo if available
-                if (line.demo) {
-                    await UI.displayMathDemo(line.t, line.demo);
-                } else {
-                    await UI.displayText(line.t, !!line.ex, line.ex || "");
-                }
-                
-                // Trigger number drop animation on first line
-                if (STATE.lineIndex === 0) {
-                    await Utils.sleep(800);
-                    DOM.numberDrop.classList.remove('dropping');
-                    void DOM.numberDrop.offsetWidth; // Force reflow
-                    DOM.numberDrop.classList.add('dropping');
-                }
-                
-                if (line.auto) {
-                    // Hide button when auto text is playing, but keep mill until line 6 (index 6)
-                    UI.hideButton();
-                    if (STATE.lineIndex >= 6) {
-                        UI.hideElement(DOM.millEl);
-                    }
-                    await Utils.sleep(Utils.getWaitTime(line.t));
-                    STATE.lineIndex++;
-                    if (STATE.lineIndex < act.lines.length) {
-                        await this.runMathSequence();
-                    }
-                } else {
-                    setTimeout(() => UI.showButton(line.b), 1000);
-                }
-            },
-
-            async runVisionSequence(act) {
-                document.body.classList.add('magic-active');
-                EyeController.setMagicMode(true);
-
-                for (let i = 0; i < act.lines.length; i++) {
-                    await UI.displayText(act.lines[i]);
-                    await Utils.sleep(Utils.getWaitTime(act.lines[i]));
-                }
-                
-                await this.revealFinal();
-            },
-
-            showActButton(act) {
-                UI.fadeOut(DOM.sentenceEl);
-                
-                setTimeout(() => {
-                    if (act.showGrid) {
-                        this.renderGrid();
-                        UI.showElement(DOM.grid, "grid");
-                        UI.hideElement(DOM.sentenceEl);
-                    }
-                    
-                    const isDisabled = act.needsWait;
-                    UI.showButton(act.btn, isDisabled);
-                    
-                    if (isDisabled) {
-                        setTimeout(() => {
-                            DOM.btn.disabled = false;
-                        }, CONFIG.BUTTON_DELAY);
-                    }
-                }, 500);
-            },
-
-            renderGrid() {
-                const fragments = [];
-                for (let i = 0; i < CONFIG.GRID_SIZE; i++) {
-                    const symbol = (i % 9 === 0) 
-                        ? STATE.magicEmoji 
-                        : STATE.symbols[Math.floor(Math.random() * STATE.symbols.length)];
-                    
-                    fragments.push(`
-                        <div class="sym-card" role="gridcell" aria-label="Number ${i}, symbol ${symbol}">
-                            <div class="num">${i}</div>
-                            <div class="icon">${symbol}</div>
-                        </div>
-                    `);
-                }
-                DOM.grid.innerHTML = fragments.join('');
-            },
-
-            async revealFinal() {
-                await UI.fadeOut(DOM.sentenceEl);
-                await Utils.sleep(200);
-                
-                DOM.flash.classList.add('flash-anim');
-                
-                await Utils.sleep(250);
-                DOM.merlinChar.style.opacity = "0";
-                DOM.merlinChar.style.transform = "scale(0.5)";
-                UI.hideElement(DOM.sentenceEl);
-                
-                DOM.finalRes.innerText = STATE.magicEmoji;
-                UI.showElement(DOM.finalRes, "block");
-                DOM.finalRes.classList.add('final-pop');
-                
-                await Utils.sleep(4250);
-                UI.showButton(STATE.replayText, false);
-                document.body.classList.remove('magic-active');
-                EyeController.setMagicMode(false);
-                STATE.currentAct = 99;
-            },
-
-            handleButtonClick() {
-                if (STATE.currentAct === 99) {
-                    this.restart();
-                    return;
-                }
-
-                const act = STATE.chosenActs[STATE.currentAct];
-                
-                if (act.isMath && STATE.lineIndex < act.lines.length - 1) {
-                    STATE.lineIndex++;
-                    this.runMathSequence();
-                } else if (STATE.currentAct < STATE.chosenActs.length - 1) {
-                    STATE.currentAct++;
-                    this.playAct(STATE.currentAct);
-                }
-            },
-
-            restart() {
-                Utils.clearAllTimeouts();
-                EyeController.stop();
-                location.reload();
-            }
-        };
-
-        // ============================================
-        // GLOBAL FUNCTIONS (for onclick handlers)
-        // ============================================
-        function startWithLang(lang) {
-            Game.initialize(lang);
+            nextIntroLine();
         }
 
-        function handleBtnClick() {
-            Game.handleButtonClick();
+        function startTrick() {
+            step = 1;
+            msg.innerHTML = texts[lang].step1;
+            const box = document.createElement('div');
+            box.id = "numberBox";
+            box.className = 'number-box';
+            box.innerHTML = `<div class="number-display"><span class="digit">X</span><span class="digit">X</span></div>`;
+            content.appendChild(box);
+            
+            setTimeout(() => { 
+                btn.textContent = texts[lang].btn2; 
+                btn.classList.remove('hidden'); 
+            }, 1000);
         }
 
-        // ============================================
-        // INITIALIZATION
-        // ============================================
-        window.addEventListener('DOMContentLoaded', () => {
-            console.log('🧙‍♂️ Veliki Merlin initialized');
-        });
+        function handleLogic() {
+            step++;
+            btn.classList.add('hidden');
+
+            if (step === 2) {
+                msg.innerHTML = texts[lang].step2;
+                document.querySelector('.number-display').innerHTML = `
+                    <span class="digit">X</span><span class="operator">+</span><span class="digit">X</span><span class="equals">=</span>
+                `;
+                setTimeout(() => { btn.textContent = texts[lang].btn3; btn.classList.remove('hidden'); }, 1500);
+            } 
+            else if (step === 3) {
+                msg.innerHTML = texts[lang].step3;
+                document.querySelector('.number-display').innerHTML = `<span class="digit">X</span><span class="digit">X</span> <span class="operator">-</span>`;
+                setTimeout(() => { btn.textContent = texts[lang].btn4; btn.classList.remove('hidden'); }, 2000);
+            }
+            else if (step === 4) {
+                msg.innerHTML = texts[lang].step4;
+                if(document.getElementById('numberBox')) document.getElementById('numberBox').remove();
+                showGrid();
+                setTimeout(() => { btn.textContent = texts[lang].btn5; btn.classList.remove('hidden'); }, 3000);
+            }
+            else if (step === 5) {
+                content.innerHTML = `<div class="message show" style="font-size: 3rem;">${texts[lang].step5}</div>`;
+                setTimeout(() => showFinal(), 3500);
+            }
+        }
+
+        function showGrid() {
+            const grid = document.createElement('div');
+            grid.className = 'grid';
+            for (let i = 0; i < 100; i++) {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                // Magični broj je uvijek djeljiv sa 9 u ovom triku
+                const s = (i % 9 === 0) ? magicSymbol : symbols[Math.floor(Math.random() * symbols.length)];
+                item.innerHTML = `<div class="grid-number">${i}</div><div class="grid-symbol">${s}</div>`;
+                grid.appendChild(item);
+            }
+            content.appendChild(grid);
+        }
+
+        function showFinal() {
+            content.innerHTML = `<div class="message show">${texts[lang].reveal}</div><div style="font-size: 15rem; filter: drop-shadow(0 0 50px #ffd700); animation: pop 0.8s ease;">${magicSymbol}</div>`;
+            setTimeout(() => {
+                btn.classList.remove('hidden');
+                btn.textContent = texts[lang].btnAgain;
+                btn.onclick = () => location.reload();
+            }, 2500);
+        }
     </script>
 </body>
 </html>
