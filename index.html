@@ -2,277 +2,271 @@
 <html lang="sr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Veliki Merlin - Magija Brojeva</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veliki Merlin - Magija</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background: radial-gradient(circle at center, #1a0033, #000);
             color: white;
-            height: 100vh;
-            width: 100vw;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden; /* Onemogućen scroll na cijeloj stranici */
-            padding: 10px;
+            overflow-x: hidden;
         }
 
         .wizard-container {
-            text-align: center;
             width: 100%;
-            max-width: 600px;
-            height: 95vh;
+            max-width: 900px;
+            text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between; /* Raspoređuje elemente od vrha do dna */
+            padding: 20px;
         }
 
         .wizard-hat {
-            font-size: clamp(100px, 20vh, 200px); /* Prilagodljiv šešir */
+            font-size: clamp(150px, 25vw, 280px); /* Veliki Merlin */
             animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px #9d4edd);
-            line-height: 1;
+            filter: drop-shadow(0 0 50px #9d4edd);
+            margin-bottom: 10px;
             user-select: none;
-            margin-top: 10px;
-        }
-
-        .content-area {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            overflow: hidden;
         }
 
         #merlinMessage {
-            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
             font-weight: bold;
-            color: white;
-            margin-bottom: 15px;
-            min-height: 60px;
-            opacity: 0;
-            transition: opacity 0.5s ease;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 30px;
+            min-height: 100px;
+            line-height: 1.3;
         }
-        #merlinMessage.show { opacity: 1; }
 
         .number-box {
             background: rgba(157, 78, 221, 0.2);
-            border: 4px solid #9d4edd;
-            border-radius: 20px;
-            padding: 20px;
-            width: 90%;
+            border: 6px solid #9d4edd;
+            border-radius: 40px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 0 60px rgba(157, 78, 221, 0.6);
             display: flex;
-            align-items: center;
             justify-content: center;
-            box-shadow: 0 0 30px rgba(157, 78, 221, 0.4);
-            animation: pop 0.5s ease;
+            align-items: center;
+            margin-bottom: 30px;
         }
 
         .number-display {
-            font-size: clamp(4rem, 15vw, 7rem);
+            font-size: clamp(5rem, 15vw, 9rem);
             font-weight: 900;
             color: #ffd700;
+            text-shadow: 0 0 40px #ffd700;
             display: flex;
-            gap: 10px;
-            text-shadow: 0 0 20px #ffd700;
+            gap: 15px;
         }
 
-        /* GRID - JEDINI DIO KOJI SE SKROLUJE */
+        .operator { color: #f472b6; }
+        .equals { color: #4ade80; }
+
+        /* Grid koji je pregledan i velik */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 12px;
             width: 100%;
-            height: 40vh; /* Fiksna visina za grid */
-            overflow-y: auto; /* Interni scroll */
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 15px;
-            padding: 10px;
-            border: 2px solid rgba(157, 78, 221, 0.5);
-            -webkit-overflow-scrolling: touch; /* Tečan scroll na mobitelu */
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid #9d4edd;
         }
 
         .grid-item {
-            background: rgba(157, 78, 221, 0.1);
-            border: 1px solid rgba(157, 78, 221, 0.3);
-            border-radius: 8px;
-            padding: 8px;
+            background: rgba(157, 78, 221, 0.2);
+            border: 1px solid #9d4edd;
+            border-radius: 12px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .grid-number { color: #ffd700; font-size: 0.8rem; }
-        .grid-symbol { font-size: 1.8rem; }
+
+        .grid-number { color: #ffd700; font-weight: bold; font-size: 1.1rem; }
+        .grid-symbol { font-size: 2.5rem; }
 
         .button {
             background: #ffd700;
             color: #000;
             border: none;
-            padding: 15px 40px;
-            font-size: clamp(1.2rem, 4vw, 1.6rem);
+            padding: 25px 60px;
+            font-size: 2rem;
             font-weight: bold;
-            border-radius: 50px;
+            border-radius: 60px;
             cursor: pointer;
-            box-shadow: 0 5px 0 #b89b00;
-            margin-bottom: 10px;
+            box-shadow: 0 8px 0 #b89b00;
             text-transform: uppercase;
+            transition: 0.2s;
+            margin-top: 20px;
         }
-        .button:active { transform: translateY(3px); box-shadow: 0 2px 0 #b89b00; }
+
+        .button:active { transform: translateY(4px); box-shadow: 0 4px 0 #b89b00; }
 
         .lang-btn {
             background: rgba(255, 255, 255, 0.1);
-            border: 2px solid #9d4edd;
+            border: 3px solid #9d4edd;
             color: white;
-            padding: 15px 30px;
-            font-size: 1.3rem;
-            border-radius: 12px;
+            padding: 20px 40px;
+            font-size: 1.8rem;
+            border-radius: 20px;
             cursor: pointer;
-            margin: 10px;
+            margin: 15px;
+            transition: 0.3s;
         }
+        .lang-btn:hover { background: #9d4edd; transform: scale(1.1); }
 
-        .thinking-dots { font-size: 2rem; color: #38bdf8; letter-spacing: 10px; animation: blink 1.5s infinite; margin-bottom: 10px; }
+        .thinking-dots { font-size: 3rem; color: #38bdf8; letter-spacing: 15px; animation: blink 1.5s infinite; margin-bottom: 20px; }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes pop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px); } }
         @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
         .hidden { display: none !important; }
 
-        /* Custom scrollbar */
-        .grid::-webkit-scrollbar { width: 6px; }
+        /* Scrollbar */
+        .grid::-webkit-scrollbar { width: 10px; }
         .grid::-webkit-scrollbar-thumb { background: #9d4edd; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="wizard-container">
-        <div class="wizard-hat">🧙‍♂️</div>
+<div class="wizard-container">
+    <div class="wizard-hat">🧙‍♂️</div>
 
-        <div id="langSection">
-            <h1 style="color:#ffd700; margin-bottom: 20px;">VELIKI MERLIN</h1>
-            <button class="lang-btn" onclick="startIntro('bs')">BOSANSKI</button>
-            <button class="lang-btn" onclick="startIntro('en')">ENGLISH</button>
-        </div>
-
-        <div id="content" class="content-area hidden">
-            <div id="merlinMessage" class="message"></div>
-            </div>
-
-        <div class="thinking-dots hidden" id="thinkDots">...</div>
-        <button id="actionBtn" class="button hidden" onclick="handleLogic()"></button>
+    <div id="langSection">
+        <h1 style="color:#ffd700; font-size: 3.5rem; margin-bottom: 30px;">VELIKI MERLIN</h1>
+        <button class="lang-btn" onclick="startIntro('bs')">BOSANSKI</button>
+        <button class="lang-btn" onclick="startIntro('en')">ENGLISH</button>
     </div>
 
-    <script>
-        const symbols = ['🐶', '🐯', '🦄', '🐸', '🐼', '🚀', '🌈', '🦉', '💎', '🔥', '🦁', '🐢', '🦊', '🐨', '🧞', '🎭', '🍀', '🍎', '🍄', '🌍'];
-        let magicSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-        let step = 0;
-        let lang = 'bs';
+    <div id="content" class="content-area hidden">
+        <div id="merlinMessage"></div>
+        </div>
 
-        const texts = {
-            bs: {
-                intro: ["Pozdrav! Ja sam VELIKI MERLIN!", "Danas ću pročitati tvoje misli...", "Magija počinje SADA!"],
-                step1: "Zamisli dvocifren broj:",
-                step2: "Razdvoji cifre i saberi ih:",
-                step3: "Zbir oduzmi od svog broja:",
-                step4: "Zapamti sliku pored svog broja:",
-                step5: "Gledaj duboko u tu sliku...",
-                reveal: "TVOJA SLIKA JE...",
-                btn2: "ZAMISLIO SAM", btn3: "SABRAO SAM", btn4: "ODUZEO SAM", btn5: "ZAPAMTIO SAM", btnAgain: "PONOVO"
-            },
-            en: {
-                intro: ["Greetings! I am GREAT MERLIN!", "I will read your mind today...", "Magic starts NOW!"],
-                step1: "Think of a 2-digit number:",
-                step2: "Split digits and add them:",
-                step3: "Subtract sum from your number:",
-                step4: "Remember the picture:",
-                step5: "Look deep into the picture...",
-                reveal: "YOUR PICTURE IS...",
-                btn2: "I GOT IT", btn3: "ADDED", btn4: "DONE", btn5: "REMEMBERED", btnAgain: "AGAIN"
-            }
-        };
+    <div class="thinking-dots hidden" id="thinkDots">...</div>
+    <button id="actionBtn" class="button hidden" onclick="handleLogic()"></button>
+</div>
 
-        const content = document.getElementById('content');
-        const btn = document.getElementById('actionBtn');
-        const msg = document.getElementById('merlinMessage');
-        const dots = document.getElementById('thinkDots');
+<script>
+    const symbols = ['🐶', '🐯', '🦄', '🐸', '🐼', '🚀', '🌈', '🦉', '💎', '🔥', '🦁', '🐢', '🦊', '🐨', '🧞', '🎭', '🍀', '🍎', '🍄', '🌍'];
+    let magicSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+    let step = 0;
+    let lang = 'bs';
 
-        function startIntro(selectedLang) {
-            lang = selectedLang;
-            document.getElementById('langSection').classList.add('hidden');
-            content.classList.remove('hidden');
-            dots.classList.remove('hidden');
-            
-            let idx = 0;
-            const seq = texts[lang].intro;
-            function run() {
-                if(idx < seq.length) {
-                    msg.innerHTML = seq[idx];
-                    msg.classList.add('show');
-                    idx++;
-                    setTimeout(() => { if(idx < seq.length) msg.classList.remove('show'); setTimeout(run, 600); }, 2000);
-                } else { startTrick(); }
-            }
-            run();
+    const texts = {
+        bs: {
+            intro: ["Pozdrav! Ja sam VELIKI MERLIN!", "Danas ću pročitati tvoje misli...", "Magija počinje SADA!"],
+            step1: "Zamisli dvocifren broj:",
+            step2: "Razdvoji cifre i saberi ih:",
+            step3: "Zbir oduzmi od svog broja:",
+            step4: "Zapamti sliku pored tvog broja:",
+            step5: "Gledaj duboko u tu sliku...",
+            reveal: "TVOJA SLIKA JE...",
+            btn2: "ZAMISLIO SAM 🤔", btn3: "SABRAO SAM ➕", btn4: "ODUZEO SAM ✨", btn5: "ZAPAMTIO SAM 🖼️", btnAgain: "PONOVO 🔥"
+        },
+        en: {
+            intro: ["Greetings! I am GREAT MERLIN!", "I will read your mind today...", "Magic starts NOW!"],
+            step1: "Think of a 2-digit number:",
+            step2: "Split digits and add them:",
+            step3: "Subtract sum from your number:",
+            step4: "Remember the picture:",
+            step5: "Look deep into the picture...",
+            reveal: "YOUR PICTURE IS...",
+            btn2: "I GOT IT 🤔", btn3: "ADDED ➕", btn4: "DONE ✨", btn5: "REMEMBERED 🖼️", btnAgain: "AGAIN 🔥"
         }
+    };
 
-        function startTrick() {
-            step = 1;
-            msg.innerHTML = texts[lang].step1;
-            content.innerHTML = `<div id="merlinMessage" class="message show">${texts[lang].step1}</div><div id="nBox" class="number-box"><div class="number-display">XX</div></div>`;
-            btn.textContent = texts[lang].btn2;
-            btn.classList.remove('hidden');
+    const content = document.getElementById('content');
+    const btn = document.getElementById('actionBtn');
+    const msg = document.getElementById('merlinMessage');
+    const dots = document.getElementById('thinkDots');
+
+    function startIntro(selectedLang) {
+        lang = selectedLang;
+        document.getElementById('langSection').classList.add('hidden');
+        content.classList.remove('hidden');
+        dots.classList.remove('hidden');
+        
+        let idx = 0;
+        function run() {
+            if(idx < texts[lang].intro.length) {
+                msg.innerHTML = texts[lang].intro[idx];
+                idx++;
+                setTimeout(run, 2500);
+            } else { startTrick(); }
         }
+        run();
+    }
 
-        function handleLogic() {
-            step++;
-            btn.classList.add('hidden');
-            const nDisplay = document.querySelector('.number-display');
+    function startTrick() {
+        step = 1;
+        msg.innerHTML = texts[lang].step1;
+        const nBox = document.createElement('div');
+        nBox.id = "nBox";
+        nBox.className = "number-box";
+        nBox.innerHTML = `<div class="number-display">XX</div>`;
+        content.appendChild(nBox);
+        btn.textContent = texts[lang].btn2;
+        btn.classList.remove('hidden');
+    }
 
-            if (step === 2) {
-                document.getElementById('merlinMessage').innerHTML = texts[lang].step2;
-                nDisplay.innerHTML = `X<span class="operator">+</span>X<span class="equals">=</span>`;
-                setTimeout(() => { btn.textContent = texts[lang].btn3; btn.classList.remove('hidden'); }, 1500);
-            } 
-            else if (step === 3) {
-                document.getElementById('merlinMessage').innerHTML = texts[lang].step3;
-                nDisplay.innerHTML = `XX <span class="operator">-</span>`;
-                setTimeout(() => { btn.textContent = texts[lang].btn4; btn.classList.remove('hidden'); }, 1500);
-            }
-            else if (step === 4) {
-                document.getElementById('merlinMessage').innerHTML = texts[lang].step4;
-                document.getElementById('nBox').remove();
-                showGrid();
-                setTimeout(() => { btn.textContent = texts[lang].btn5; btn.classList.remove('hidden'); }, 3000);
-            }
-            else if (step === 5) {
-                document.getElementById('merlinMessage').innerHTML = texts[lang].step5;
-                document.querySelector('.grid').style.opacity = "0.3";
-                setTimeout(() => showFinal(), 3000);
-            }
+    function handleLogic() {
+        step++;
+        btn.classList.add('hidden');
+        const nDisplay = document.querySelector('.number-display');
+
+        if (step === 2) {
+            msg.innerHTML = texts[lang].step2;
+            nDisplay.innerHTML = `X<span class="operator">+</span>X<span class="equals">=</span>`;
+            setTimeout(() => { btn.textContent = texts[lang].btn3; btn.classList.remove('hidden'); }, 1500);
+        } 
+        else if (step === 3) {
+            msg.innerHTML = texts[lang].step3;
+            nDisplay.innerHTML = `XX <span class="operator">-</span>`;
+            setTimeout(() => { btn.textContent = texts[lang].btn4; btn.classList.remove('hidden'); }, 1500);
         }
-
-        function showGrid() {
-            const grid = document.createElement('div');
-            grid.className = 'grid';
-            for (let i = 0; i < 100; i++) {
-                const s = (i % 9 === 0) ? magicSymbol : symbols[Math.floor(Math.random() * symbols.length)];
-                grid.innerHTML += `<div class="grid-item"><div class="grid-number">${i}</div><div class="grid-symbol">${s}</div></div>`;
-            }
-            content.appendChild(grid);
+        else if (step === 4) {
+            msg.innerHTML = texts[lang].step4;
+            if(document.getElementById('nBox')) document.getElementById('nBox').remove();
+            showGrid();
+            setTimeout(() => { btn.textContent = texts[lang].btn5; btn.classList.remove('hidden'); }, 3000);
         }
-
-        function showFinal() {
-            content.innerHTML = `<div class="message show">${texts[lang].reveal}</div><div style="font-size: clamp(8rem, 30vh, 15rem); text-shadow: 0 0 50px #ffd700; animation: pop 0.8s ease;">${magicSymbol}</div>`;
-            btn.textContent = texts[lang].btnAgain;
-            btn.classList.remove('hidden');
-            btn.onclick = () => location.reload();
+        else if (step === 5) {
+            msg.innerHTML = texts[lang].step5;
+            document.querySelector('.grid').style.opacity = "0.2";
+            setTimeout(() => showFinal(), 3000);
         }
-    </script>
+    }
+
+    function showGrid() {
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+        for (let i = 0; i < 100; i++) {
+            const s = (i % 9 === 0) ? magicSymbol : symbols[Math.floor(Math.random() * symbols.length)];
+            grid.innerHTML += `<div class="grid-item"><div class="grid-number">${i}</div><div class="grid-symbol">${s}</div></div>`;
+        }
+        content.appendChild(grid);
+    }
+
+    function showFinal() {
+        content.innerHTML = `<div id="merlinMessage" style="color:#ffd700; font-size:3rem;">${texts[lang].reveal}</div><div style="font-size: 15rem; text-shadow: 0 0 60px #ffd700; animation: float 2s infinite;">${magicSymbol}</div>`;
+        btn.textContent = texts[lang].btnAgain;
+        btn.classList.remove('hidden');
+        btn.onclick = () => location.reload();
+    }
+</script>
+
 </body>
 </html>
