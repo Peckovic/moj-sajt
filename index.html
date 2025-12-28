@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Veliki Merlin - Magija</title>
+    <title>Veliki Merlin - Čarobna Magija</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -11,81 +11,70 @@
             font-family: 'Arial', sans-serif;
             background: radial-gradient(circle at center, #1a0033, #000);
             color: white;
-            min-height: 100vh;
+            height: 100vh;
             width: 100vw;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow-x: hidden;
-            padding: 20px 10px;
+            overflow: hidden;
+            padding: 10px;
         }
 
         .wizard-container {
             width: 100%;
             max-width: 800px;
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
-        }
-
-        /* KOMPAKTNI BOX - šešir, priča i dugme zajedno */
-        .magic-box {
-            background: rgba(157, 78, 221, 0.15);
-            border: 3px solid #9d4edd;
-            border-radius: 30px;
-            padding: 25px;
-            width: 100%;
-            box-shadow: 0 0 40px rgba(157, 78, 221, 0.5);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+            justify-content: space-between;
+            padding: 10px 0;
         }
 
         .wizard-hat {
-            font-size: clamp(80px, 15vh, 150px);
+            font-size: clamp(120px, 22vh, 250px);
             animation: float 3s ease-in-out infinite;
             filter: drop-shadow(0 0 40px #9d4edd);
             line-height: 1;
+            margin-bottom: 5px;
+            flex-shrink: 0;
         }
 
-        .story-content {
-            width: 100%;
+        .content-area {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            justify-content: center;
+            width: 100%;
+            overflow: hidden;
         }
 
         #merlinMessage {
-            font-size: clamp(1.4rem, 4vh, 2.2rem);
+            font-size: clamp(1.4rem, 4vh, 2.5rem);
             font-weight: bold;
             color: #ffd700;
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 15px;
             text-align: center;
             width: 100%;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .number-box {
-            background: rgba(157, 78, 221, 0.3);
-            border: clamp(3px, 1vh, 5px) solid #9d4edd;
-            border-radius: 20px;
-            padding: clamp(15px, 3vh, 30px);
+            background: rgba(157, 78, 221, 0.2);
+            border: clamp(3px, 1vh, 6px) solid #9d4edd;
+            border-radius: 30px;
+            padding: clamp(15px, 3vh, 40px);
             width: 90%;
-            max-width: 400px;
-            box-shadow: 0 0 30px rgba(157, 78, 221, 0.6);
+            max-width: 450px;
+            box-shadow: 0 0 40px rgba(157, 78, 221, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .number-display {
-            font-size: clamp(3rem, 8vh, 6rem);
+            font-size: clamp(3.5rem, 10vh, 8rem);
             font-weight: 900;
             color: #ffd700;
             text-shadow: 0 0 30px #ffd700;
@@ -96,57 +85,18 @@
         .operator { color: #f472b6; }
         .equals { color: #4ade80; }
 
-        .button-wrapper {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .thinking-dots { 
-            font-size: 2rem; 
-            color: #38bdf8; 
-            letter-spacing: 12px; 
-            animation: blink 1.5s infinite; 
-            height: 30px; 
-        }
-
-        .button {
-            background: #ffd700;
-            color: #000;
-            border: none;
-            padding: clamp(12px, 2vh, 18px) clamp(30px, 5vw, 50px);
-            font-size: clamp(1.1rem, 2.5vh, 1.6rem);
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 6px 0 #b89b00;
-            text-transform: uppercase;
-            transition: 0.2s;
-        }
-
-        .button:active { 
-            transform: translateY(3px); 
-            box-shadow: 0 3px 0 #b89b00; 
-        }
-
-        /* GRID ispod kompaktnog box-a */
-        .grid-container {
-            width: 100%;
-            max-height: 50vh;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 20px;
-            padding: 15px;
-            border: 2px solid #9d4edd;
-        }
-
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
             gap: 8px;
             width: 100%;
+            height: 100%;
+            max-height: 45vh;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 15px;
+            border: 2px solid #9d4edd;
         }
 
         .grid-item {
@@ -159,97 +109,78 @@
             align-items: center;
         }
 
-        .grid-number { 
-            color: #ffd700; 
-            font-weight: bold; 
-            font-size: 0.9rem; 
-        }
-        
-        .grid-symbol { 
-            font-size: 2rem; 
-        }
+        .grid-number { color: #ffd700; font-weight: bold; font-size: 0.9rem; }
+        .grid-symbol { font-size: 2rem; }
 
-        /* Language selection */
-        .lang-section {
+        .button-area {
+            flex-shrink: 0;
+            padding: 10px 0;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
         }
 
-        .lang-section h1 {
-            color: #ffd700; 
-            font-size: clamp(2rem, 5vw, 3rem); 
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+        .button {
+            background: #ffd700;
+            color: #000;
+            border: none;
+            padding: clamp(12px, 2vh, 22px) clamp(30px, 5vw, 60px);
+            font-size: clamp(1.2rem, 3vh, 1.8rem);
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #b89b00;
+            text-transform: uppercase;
+            transition: 0.2s;
         }
+
+        .button:active { transform: translateY(3px); box-shadow: 0 3px 0 #b89b00; }
 
         .lang-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid #9d4edd;
             color: white;
-            padding: 15px 40px;
+            padding: 15px 30px;
             font-size: 1.5rem;
             border-radius: 15px;
             cursor: pointer;
-            transition: 0.3s;
+            margin: 10px;
         }
 
-        .lang-btn:hover {
-            background: rgba(157, 78, 221, 0.3);
-            transform: scale(1.05);
-        }
+        .thinking-dots { font-size: 2rem; color: #38bdf8; letter-spacing: 12px; animation: blink 1.5s infinite; height: 30px; }
 
-        @keyframes float { 
-            0%, 100% { transform: translateY(0); } 
-            50% { transform: translateY(-10px); } 
-        }
-        
-        @keyframes blink { 
-            0%, 100% { opacity: 0.2; } 
-            50% { opacity: 1; } 
-        }
-        
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
         .hidden { display: none !important; }
 
-        .grid-container::-webkit-scrollbar { width: 8px; }
-        .grid-container::-webkit-scrollbar-thumb { 
-            background: #9d4edd; 
-            border-radius: 10px; 
-        }
+        .grid::-webkit-scrollbar { width: 8px; }
+        .grid::-webkit-scrollbar-thumb { background: #9d4edd; border-radius: 10px; }
     </style>
 </head>
 <body>
 
 <div class="wizard-container">
-    <!-- Language Selection -->
-    <div id="langSection" class="magic-box lang-section">
-        <div class="wizard-hat">🧙‍♂️</div>
-        <h1>VELIKI MERLIN</h1>
+    <div class="wizard-hat">🧙‍♂️</div>
+
+    <div id="langSection" class="content-area">
+        <h1 style="color:#ffd700; font-size: 2.5rem; margin-bottom: 20px;">VELIKI MERLIN</h1>
         <button class="lang-btn" onclick="startIntro('bs')">BOSANSKI</button>
         <button class="lang-btn" onclick="startIntro('en')">ENGLISH</button>
     </div>
 
-    <!-- Main Magic Box -->
-    <div id="magicBox" class="magic-box hidden">
-        <div class="wizard-hat">🧙‍♂️</div>
-        
-        <div class="story-content">
-            <div id="merlinMessage"></div>
-            <div id="dynamicContent"></div>
-        </div>
-
-        <div class="button-wrapper">
-            <div class="thinking-dots hidden" id="thinkDots">...</div>
-            <button id="actionBtn" class="button hidden" onclick="handleLogic()"></button>
-        </div>
+    <div id="content" class="content-area hidden">
+        <div id="merlinMessage"></div>
     </div>
 
-    <!-- Grid Container (separate) -->
-    <div id="gridContainer" class="grid-container hidden"></div>
+    <div class="button-area">
+        <div class="thinking-dots hidden" id="thinkDots">...</div>
+        <button id="actionBtn" class="button hidden" onclick="handleLogic()"></button>
+    </div>
 </div>
 
 <script>
-    const symbols = ['🐶', '🐯', '🦄', '🐸', '🐼', '🚀', '🌈', '🦉', '💎', '🔥', '🦁', '🐢', '🦊', '🐨', '🧞', '🎭', '🍀', '🎃', '🍄', '🌟'];
+    const symbols = ['🐶', '🐯', '🦄', '🐸', '🐼', '🚀', '🌈', '🦉', '💎', '🔥', '🦁', '🐢', '🦊', '🐨', '🧞', '🎭', '🍀', '🍎', '🍄', '🌍'];
     let magicSymbol = symbols[Math.floor(Math.random() * symbols.length)];
     let step = 0;
     let lang = 'bs';
@@ -277,17 +208,15 @@
         }
     };
 
-    const magicBox = document.getElementById('magicBox');
+    const content = document.getElementById('content');
     const btn = document.getElementById('actionBtn');
     const msg = document.getElementById('merlinMessage');
     const dots = document.getElementById('thinkDots');
-    const dynamicContent = document.getElementById('dynamicContent');
-    const gridContainer = document.getElementById('gridContainer');
 
     function startIntro(selectedLang) {
         lang = selectedLang;
         document.getElementById('langSection').classList.add('hidden');
-        magicBox.classList.remove('hidden');
+        content.classList.remove('hidden');
         dots.classList.remove('hidden');
         
         let idx = 0;
@@ -304,16 +233,19 @@
     function startTrick() {
         step = 1;
         msg.innerHTML = texts[lang].step1;
-        dynamicContent.innerHTML = `<div class="number-box"><div class="number-display">XX</div></div>`;
+        const nBox = document.createElement('div');
+        nBox.id = "nBox";
+        nBox.className = "number-box";
+        nBox.innerHTML = `<div class="number-display">XX</div>`;
+        content.appendChild(nBox);
         btn.textContent = texts[lang].btn2;
         btn.classList.remove('hidden');
-        dots.classList.add('hidden');
     }
 
     function handleLogic() {
         step++;
         btn.classList.add('hidden');
-        const nDisplay = dynamicContent.querySelector('.number-display');
+        const nDisplay = document.querySelector('.number-display');
 
         if (step === 2) {
             msg.innerHTML = texts[lang].step2;
@@ -327,32 +259,45 @@
         }
         else if (step === 4) {
             msg.innerHTML = texts[lang].step4;
-            dynamicContent.innerHTML = '';
+            if(document.getElementById('nBox')) document.getElementById('nBox').remove();
             showGrid();
             setTimeout(() => { btn.textContent = texts[lang].btn5; btn.classList.remove('hidden'); }, 2500);
         }
         else if (step === 5) {
             msg.innerHTML = texts[lang].step5;
-            gridContainer.style.opacity = "0.2";
+            document.querySelector('.grid').style.opacity = "0.2";
             setTimeout(() => showFinal(), 3000);
         }
     }
 
     function showGrid() {
-        gridContainer.classList.remove('hidden');
         const grid = document.createElement('div');
         grid.className = 'grid';
+        
+        // 1. Kreiraj listu brojeva od 0 do 99
+        let numbers = [];
         for (let i = 0; i < 100; i++) {
-            const s = (i % 9 === 0) ? magicSymbol : symbols[Math.floor(Math.random() * symbols.length)];
-            grid.innerHTML += `<div class="grid-item"><div class="grid-number">${i}</div><div class="grid-symbol">${s}</div></div>`;
+            numbers.push(i);
         }
-        gridContainer.appendChild(grid);
+        
+        // 2. Izmiješaj brojeve (Fisher-Yates shuffle)
+        for (let i = numbers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+        }
+        
+        // 3. Za svaki broj dodaj odgovarajući simbol
+        for (let i = 0; i < 100; i++) {
+            const number = numbers[i];
+            const s = (number % 9 === 0) ? magicSymbol : symbols[Math.floor(Math.random() * symbols.length)];
+            grid.innerHTML += `<div class="grid-item"><div class="grid-number">${number}</div><div class="grid-symbol">${s}</div></div>`;
+        }
+        
+        content.appendChild(grid);
     }
 
     function showFinal() {
-        gridContainer.classList.add('hidden');
-        msg.innerHTML = texts[lang].reveal;
-        dynamicContent.innerHTML = `<div style="font-size: clamp(6rem, 20vh, 12rem); text-shadow: 0 0 50px #ffd700; animation: float 2s infinite;">${magicSymbol}</div>`;
+        content.innerHTML = `<div id="merlinMessage" style="color:#ffd700; font-size:clamp(1.8rem, 5vh, 3rem);">${texts[lang].reveal}</div><div style="font-size: clamp(8rem, 25vh, 15rem); text-shadow: 0 0 50px #ffd700; animation: float 2s infinite;">${magicSymbol}</div>`;
         btn.textContent = texts[lang].btnAgain;
         btn.classList.remove('hidden');
         btn.onclick = () => location.reload();
