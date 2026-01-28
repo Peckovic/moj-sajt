@@ -158,24 +158,42 @@
 
         /* --- MATEMATIČKI SIMBOLI --- */
         .center-lines {
-            position: absolute; top: 50%; left: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            font-size: clamp(120px, 20vw, 300px);
+            font-size: 120px; /* Fiksna veličina umjesto clamp */
             font-weight: 900;
             font-family: 'Cinzel', serif;
-            color: #ffffff; text-shadow: var(--text-glow);
-            z-index: 99; display: flex; align-items: center; gap: 0px;
+            color: #ffffff;
+            text-shadow: var(--text-glow);
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            gap: 0px;
+            width: 100%;
+            text-align: center;
+            justify-content: center;
         }
-        .center-lines span { display: inline-block; opacity: 0; }
+        .center-lines span {
+            display: inline-block;
+            opacity: 0;
+        }
 
         .math-symbol {
-            position: fixed; top: 50%; left: 50%;
+            position: fixed;
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            font-size: clamp(120px, 20vw, 300px);
+            font-size: 120px; /* Fiksna veličina */
             font-weight: 900;
             font-family: 'Cinzel', serif;
-            color: #ffffff; text-shadow: var(--text-glow);
-            opacity: 0; z-index: 98;
+            color: #ffffff;
+            text-shadow: var(--text-glow);
+            opacity: 0;
+            z-index: 98;
+            text-align: center;
+            white-space: nowrap;
         }
 
         /* --- ANIMACIJE --- */
@@ -297,12 +315,19 @@
 
         /* --- RESPONSIVE (POPRAVLJENI ZA MOBIL) --- */
         @media (max-width: 1024px) {
+            .center-lines,
+            .math-symbol {
+                font-size: 100px; /* Smanjeno za tablete */
+            }
             .overlay-btn { padding: 30px 70px; font-size: 36px; min-width: 420px; }
             .lang-select-btn { font-size: 16px; padding: 15px 40px; }
         }
 
         @media (max-width: 768px) {
-            .center-lines, .math-symbol { font-size: 24vw; }
+            .center-lines,
+            .math-symbol {
+                font-size: 70px; /* Fiksna veličina za mobitele */
+            }
             
             /* ISPRAVLJENO ZA FLEKIBILNOST NA MOBILU */
             .number-grid { 
@@ -326,6 +351,17 @@
             .subtitle { font-size: 20px; bottom: 3%; }
             .overlay-btn { padding: 20px 40px; font-size: 24px; min-width: 260px; }
             .menu-container { gap: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .center-lines,
+            .math-symbol {
+                font-size: 50px; /* Još manje za male ekrane */
+            }
+            
+            .subtitle {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -838,12 +874,11 @@
                         s = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
                     } while (s === magicSymbol);
                 }
-                html += `
-                    <div class="grid-item">
+                html += 
+                    `<div class="grid-item">
                         <div class="grid-number">${i}</div>
                         <div class="grid-symbol">${s}</div>
-                    </div>
-                `;
+                    </div>`;
             }
             gridEl.innerHTML = html;
         }
@@ -869,12 +904,11 @@
                         s = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
                     } while (s === magicSymbol);
                 }
-                html += `
-                    <div class="grid-item">
+                html += 
+                    `<div class="grid-item">
                         <div class="grid-number">${i}</div>
                         <div class="grid-symbol">${s}</div>
-                    </div>
-                `;
+                    </div>`;
             }
             return html;
         }
@@ -912,7 +946,7 @@
 
             gridInterval = setInterval(() => {
                 pageIndex++;
-                if (pageIndex >3) {
+                if (pageIndex > 3) {
                     pageIndex = 0;
                     cycle++;
                 }
@@ -979,17 +1013,24 @@
 
                 if (current.action === "showMinus") {
                     setTimeout(() => {
-                        triggerGlitch(); 
-                        questionSign.style.transform = 'translate(120%, -50%)'; 
+                        triggerGlitch();
+                        questionSign.style.transform = 'translate(120%, -50%)';
                         questionSign.style.transition = 'transform 1s ease-in-out';
                     }, 500);
-                    setTimeout(() => { 
-                        xxNumber.style.transform = 'translate(-150%, -50%)'; 
-                        xxNumber.style.animation = 'fadeIn 0.5s ease-in forwards'; 
+                    setTimeout(() => {
+                        // Postavi "xx" u centar prije nego što ga pomakneš
+                        xxNumber.style.transform = 'translate(-50%, -50%)';
+                        xxNumber.style.animation = 'fadeIn 0.5s ease-in forwards';
                         SoundFX.playThud();
+                        
+                        // Nakon pojavljivanja, pomjeri ga
+                        setTimeout(() => {
+                            xxNumber.style.transform = 'translate(-150%, -50%)';
+                            xxNumber.style.transition = 'transform 1s ease-in-out';
+                        }, 100);
                     }, 1000);
-                    setTimeout(() => { 
-                        minusSign.style.animation = 'fadeIn 0.5s ease-in forwards'; 
+                    setTimeout(() => {
+                        minusSign.style.animation = 'fadeIn 0.5s ease-in forwards';
                         SoundFX.playGlitch();
                     }, 1500);
                 }
