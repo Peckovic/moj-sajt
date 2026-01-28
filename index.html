@@ -295,7 +295,7 @@
         .card-back { background: linear-gradient(135deg, #240b36, #c31432); transform: rotateY(180deg); font-size: 120px; }
         .card-wrapper.flipped .card { transform: rotateY(180deg); }
 
-        /* --- RESPONSIVE --- */
+        /* --- RESPONSIVE (POPRAVLJENI ZA MOBIL) --- */
         @media (max-width: 1024px) {
             .overlay-btn { padding: 30px 70px; font-size: 36px; min-width: 420px; }
             .lang-select-btn { font-size: 16px; padding: 15px 40px; }
@@ -303,10 +303,24 @@
 
         @media (max-width: 768px) {
             .center-lines, .math-symbol { font-size: 24vw; }
-            .number-grid { width: 95%; top: 28%; height: 45vh; gap: 6px; padding: 10px; }
-            .grid-item { min-height: 65px; }
+            
+            /* ISPRAVLJENO ZA FLEKIBILNOST NA MOBILU */
+            .number-grid { 
+                width: 95%; 
+                top: 28%; 
+                height: 38vh; /* Smanjeno sa 55vh na 38vh da stane na ekranu */
+                gap: 4px; /* Smanjeno sa 10px na 4px */
+                padding: 8px; /* Smanjeno sa 10px na 8px */
+            }
+            
+            .grid-item { 
+                min-height: 45px; /* Smanjeno sa 65px na 45px da stane u gridu */
+                padding: 2px; /* Smanjeno sa 5px na 2px */
+            }
+            
             .grid-number { font-size: 14px; }
             .grid-symbol { font-size: 20px; }
+            
             .page-indicator { top: 68%; }
             .card-wrapper { width: 220px; height: 320px; }
             .subtitle { font-size: 20px; bottom: 3%; }
