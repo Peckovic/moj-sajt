@@ -2,307 +2,1018 @@
 <html lang="sr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Veliki Merlin - Čarobna Magija</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magični Trik - Ultimate Edition</title>
+    
+    <!-- Fontovi -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+
     <style>
+        /* --- ESTETIKA --- */
+        :root {
+            --bg-deep: #050714;
+            --primary: #00f2ff;
+            --glass-bg: rgba(255,255,255, 0.03);
+            --text-glow: 0 0 40px rgba(0, 242, 255, 0.7);
+            --glitch-red: #ff0055;
+            --glitch-blue: #00f2ff;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: radial-gradient(circle at center, #1a0033, #000);
+            width:100vw; height: 100vh;
+            background: var(--bg-deep);
+            background-image: radial-gradient(circle at 50% 100%, #1a1f3c, #050714);
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
             color: white;
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            padding: 10px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            perspective: 1000px; /* Za 3D cestice */
         }
 
-        .wizard-container {
-            width: 100%;
-            max-width: 800px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0;
-        }
-
-        .wizard-hat {
-            font-size: clamp(120px, 22vh, 250px);
-            animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 40px #9d4edd);
-            line-height: 1;
-            margin-bottom: 5px;
-            flex-shrink: 0;
-        }
-
-        .content-area {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        #merlinMessage {
-            font-size: clamp(1.4rem, 4vh, 2.5rem);
-            font-weight: bold;
-            color: #ffd700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            margin-bottom: 15px;
+        /* --- DUGMAD --- */
+        .overlay-btn {
+            padding: 40px 100px;
+            font-size: 48px;
+            font-family: 'Cinzel', serif;
+            color: var(--primary); border: 2px solid var(--primary);
+            background: transparent; cursor: pointer; border-radius: 50px;
+            transition: all 0.3s; text-transform: uppercase; letter-spacing: 3px;
+            pointer-events: auto; position: relative; z-index: 10001;
+            min-width: 560px;
             text-align: center;
-            width: 100%;
+        }
+        .overlay-btn:hover:not(.disabled) { background: var(--primary); color: #000; box-shadow: 0 0 30px var(--primary); }
+        
+        .overlay-btn.disabled { 
+            opacity: 0.3; pointer-events: none; border-color: #555; color: #555; 
+            filter: grayscale(1); cursor: not-allowed;
         }
 
-        .number-box {
-            background: rgba(157, 78, 221, 0.2);
-            border: clamp(3px, 1vh, 6px) solid #9d4edd;
-            border-radius: 30px;
-            padding: clamp(15px, 3vh, 40px);
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 0 40px rgba(157, 78, 221, 0.5);
+        .lang-select-btn {
+            background: transparent; border: 1px solid rgba(255,255,255,0.2);
+            color: #aaa; padding: 13px 40px; border-radius: 50px; cursor: pointer;
+            font-family: 'Montserrat', sans-serif; font-size: 13px; text-transform: uppercase;
+            letter-spacing: 1px; transition: all 0.3s; font-weight: 700;
+            pointer-events: auto;
+            min-width: 200px;
+            text-align: center;
+        }
+        .lang-select-btn:hover { border-color: white; color: white; background: rgba(255,255,255,0.05); transform: scale(1.05); }
+        .lang-select-btn.selected {
+            border-color: var(--primary); color: var(--primary); background: rgba(0,242,255,0.1);
+            box-shadow: 0 0 20px rgba(0,242,255,0.2);
+        }
+
+        .menu-container {
             display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            align-items: center;
+            gap: 40px;
         }
 
-        .number-display {
-            font-size: clamp(3.5rem, 10vh, 8rem);
+        /* --- MUTE DUGME --- */
+        #mute-btn {
+            position: fixed; top: 20px; right: 20px;
+            background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.3);
+            color: white; border-radius: 50%; width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 200; font-size: 24px; transition: 0.3s;
+        }
+        #mute-btn:hover { background: var(--primary); color: black; transform: scale(1.1); }
+
+        /* --- OVERLAYS --- */
+        #start-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 10000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.8s ease;
+        }
+        
+        #reset-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 10000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- PARTICLES --- */
+        #particles-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1500;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+        @keyframes particleFly {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+        @keyframes particleFade {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+        }
+
+        /* --- GLITCH LAYER --- */
+        .glitch-active {
+            animation: glitch-anim 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: var(--glitch-red);
+            text-shadow: 2px 0 var(--glitch-blue), -2px 0 var(--glitch-red);
+        }
+        @keyframes glitch-anim {
+            0% { transform: translate(0) } 20% { transform: translate(-5px, 5px) } 40% { transform: translate(-5px, -5px) }
+            60% { transform: translate(5px, 5px) } 80% { transform: translate(5px, -5px) } 100% { transform: translate(0) }
+        }
+        .glitch-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 0, 85, 0.1); opacity: 0; pointer-events: none; z-index: 50;
+            mix-blend-mode: overlay;
+        }
+        .glitch-active-overlay {
+            animation: glitch-noise 0.2s infinite;
+            opacity: 1;
+        }
+        @keyframes glitch-noise {
+            0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 2px); }
+            20% { clip-path: inset(92% 0 1% 0); transform: translate(2px, -2px); }
+            40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(25% 0 58% 0); transform: translate(2px, -2px); }
+            80% { clip-path: inset(54% 0 7% 0); transform: translate(2px, 2px); }
+            100% { clip-path: inset(58% 0 43% 0); transform: translate(2px, -2px); }
+        }
+
+        /* --- POZADINA --- */
+        .stars { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;}
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s infinite ease-in-out; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; box-shadow: 0 0 4px var(--primary); } }
+
+        /* --- MATEMATIČKI SIMBOLI --- */
+        .center-lines {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(120px, 20vw, 300px);
             font-weight: 900;
-            color: #ffd700;
-            text-shadow: 0 0 30px #ffd700;
-            display: flex;
-            gap: 10px;
+            font-family: 'Cinzel', serif;
+            color: #ffffff; text-shadow: var(--text-glow);
+            z-index: 99; display: flex; align-items: center; gap: 0px;
+        }
+        .center-lines span { display: inline-block; opacity: 0; }
+
+        .math-symbol {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(120px, 20vw, 300px);
+            font-weight: 900;
+            font-family: 'Cinzel', serif;
+            color: #ffffff; text-shadow: var(--text-glow);
+            opacity: 0; z-index: 98;
         }
 
-        .operator { color: #f472b6; }
-        .equals { color: #4ade80; }
+        /* --- ANIMACIJE --- */
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; } }
+        @keyframes moveLeft { to { transform: translateX(-30vw); } }
+        @keyframes moveRight { to { transform: translateX(30vw); } }
+        @keyframes pulsateQuestion {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
 
-        .grid {
+        /* --- INTRO SPIN ANIMACIJA --- */
+        @keyframes spinCard {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* --- FLY AWAY ANIMACIJA --- */
+        @keyframes flyAway {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translate(150%, -200%) scale(0.1) rotate(45deg); }
+        }
+
+        /* --- TITLOVI --- */
+        #subtitleContainer {
+            position: absolute; bottom: 4%; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 1200px; text-align: center; z-index: 1000;
+            padding: 0 20px;
+        }
+        .subtitle {
+            font-size: clamp(24px, 3.5vw, 50px);
+            font-weight: 500; line-height: 1.3;
+            opacity: 0; transform: translateY(20px); transition: all 0.5s ease;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+        }
+        .subtitle.show { opacity: 1; transform: translateY(0); }
+        .highlight { color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: inline-block;}
+
+        /* --- GRID --- */
+        .number-grid {
+            position: absolute; top: 34%; left: 50%;
+            transform: translate(-50%, -50%);
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-            gap: 8px;
-            width: 100%;
-            height: 100%;
-            max-height: 45vh;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.5);
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            width: 90%;
+            max-width: 1400px;
+            height: 55vh;
+            background: rgba(0, 0, 0, 0.95);
             border-radius: 20px;
-            padding: 15px;
-            border: 2px solid #9d4edd;
+            border: 3px solid #00ffff;
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.5);
+            padding: 20px;
+            opacity: 0;
+            z-index: 500;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            overflow: hidden;
         }
-
+        .number-grid.active { opacity: 1; z-index: 600; }
         .grid-item {
-            background: rgba(157, 78, 221, 0.2);
-            border: 1px solid #9d4edd;
-            border-radius: 10px;
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(0, 255, 255, 0.15);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            border-radius: 12px; padding: 5px;
+            min-height: 85px;
+            transition: all 0.3s;
+        }
+        .grid-item:hover { background: rgba(0, 255, 255, 0.3); transform: scale(1.05); box-shadow: 0 0 15px var(--primary); }
+        .grid-number { font-size: 18px; font-weight: bold; color: #00ffff; margin-bottom: 2px; }
+        .grid-symbol { font-size: 32px; }
+
+        /* --- INDIKATOR STRANICA --- */
+        .page-indicator {
+            position: absolute; top: 78%; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px; z-index: 600; opacity: 0; transition: opacity 0.5s;
+        }
+        .page-indicator.visible { opacity: 1; }
+        .page-dot {
+            width: 14px; height: 14px; border-radius: 50%;
+            background: rgba(0, 255, 255, 0.3);
+            border: 2px solid rgba(0, 255, 255, 0.5); transition: all 0.3s;
+        }
+        .page-dot.active { width: 20px; height: 20px; background: #00ffff; box-shadow: 0 0 20px #00ffff; }
+
+        /* --- KARTA --- */
+        .card-wrapper {
+            position: absolute; top: 50%; left: 50%;
+            width: 280px; height: 400px;
+            perspective: 1000px; opacity: 0; transform: translate(-50%, -50%) scale(0.8);
+            transition: all 0.8s; z-index: 700;
+        }
+        .card-wrapper.active { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+        
+        .card-wrapper.spinning-intro {
+            opacity: 1 !important;
+            z-index: 2000 !important;
+            transform: translate(-50%, -50%) scale(1) !important;
+        }
+        .card-wrapper.spinning-intro .card {
+            animation: spinCard 0.8s infinite linear;
+        }
+        
+        .card-wrapper.fly-away {
+            opacity: 1 !important;
+            z-index: 2000 !important;
+            animation: flyAway 1.5s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
         }
 
-        .grid-number { color: #ffd700; font-weight: bold; font-size: 0.9rem; }
-        .grid-symbol { font-size: 2rem; }
+        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 1s; }
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 2px solid #00ffff;
+        }
+        .card-front { background: linear-gradient(135deg, #1e3c72, #2a5298); font-size: 120px; font-family: 'Cinzel'; }
+        .card-back { background: linear-gradient(135deg, #240b36, #c31432); transform: rotateY(180deg); font-size: 120px; }
+        .card-wrapper.flipped .card { transform: rotateY(180deg); }
 
-        .button-area {
-            flex-shrink: 0;
-            padding: 10px 0;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .overlay-btn { padding: 30px 70px; font-size: 36px; min-width: 420px; }
+            .lang-select-btn { font-size: 16px; padding: 15px 40px; }
         }
 
-        .button {
-            background: #ffd700;
-            color: #000;
-            border: none;
-            padding: clamp(12px, 2vh, 22px) clamp(30px, 5vw, 60px);
-            font-size: clamp(1.2rem, 3vh, 1.8rem);
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 6px 0 #b89b00;
-            text-transform: uppercase;
-            transition: 0.2s;
+        @media (max-width: 768px) {
+            .center-lines, .math-symbol { font-size: 24vw; }
+            .number-grid { width: 95%; top: 28%; height: 45vh; gap: 6px; padding: 10px; }
+            .grid-item { min-height: 65px; }
+            .grid-number { font-size: 14px; }
+            .grid-symbol { font-size: 20px; }
+            .page-indicator { top: 68%; }
+            .card-wrapper { width: 220px; height: 320px; }
+            .subtitle { font-size: 20px; bottom: 3%; }
+            .overlay-btn { padding: 20px 40px; font-size: 24px; min-width: 260px; }
+            .menu-container { gap: 20px; }
         }
-
-        .button:active { transform: translateY(3px); box-shadow: 0 3px 0 #b89b00; }
-
-        .lang-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid #9d4edd;
-            color: white;
-            padding: 15px 30px;
-            font-size: 1.5rem;
-            border-radius: 15px;
-            cursor: pointer;
-            margin: 10px;
-        }
-
-        .thinking-dots { font-size: 2rem; color: #38bdf8; letter-spacing: 12px; animation: blink 1.5s infinite; height: 30px; }
-
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
-        .hidden { display: none !important; }
-
-        .grid::-webkit-scrollbar { width: 8px; }
-        .grid::-webkit-scrollbar-thumb { background: #9d4edd; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="wizard-container">
-    <div class="wizard-hat">🧙‍♂️</div>
+    <!-- MUTE BUTTON -->
+    <button id="mute-btn">🔊</button>
 
-    <div id="langSection" class="content-area">
-        <h1 style="color:#ffd700; font-size: 2.5rem; margin-bottom: 20px;">VELIKI MERLIN</h1>
-        <button class="lang-btn" onclick="startIntro('bs')">BOSANSKI</button>
-        <button class="lang-btn" onclick="startIntro('en')">ENGLISH</button>
+    <!-- PARTICLES CONTAINER -->
+    <div id="particles-container"></div>
+
+    <!-- START OVERLAY -->
+    <div id="start-overlay">
+        <div class="menu-container">
+            <button class="lang-select-btn" data-lang="bs">BOSANSKI</button>
+            <button id="start-btn" class="overlay-btn disabled">POKRENI ČAROLIJU</button>
+            <button class="lang-select-btn" data-lang="en">ENGLISH</button>
+        </div>
     </div>
 
-    <div id="content" class="content-area hidden">
-        <div id="merlinMessage"></div>
+    <!-- RESET OVERLAY -->
+    <div id="reset-overlay">
+        <h2 id="reset-title" style="color:white; margin-bottom:20px; font-family:'Cinzel';">DA LI ŽELITE DA POKUŠATE PONOVO?</h2>
+        <button id="reset-btn" class="overlay-btn">IGRAJ PONOVO</button>
     </div>
 
-    <div class="button-area">
-        <div class="thinking-dots hidden" id="thinkDots">...</div>
-        <button id="actionBtn" class="button hidden" onclick="handleLogic()"></button>
+    <!-- GLITCH OVERLAY -->
+    <div id="glitchOverlay" class="glitch-overlay"></div>
+
+    <div class="stars" id="stars"></div>
+
+    <!-- MATH -->
+    <div class="center-lines">
+        <span id="x1">x</span>
+        <span id="x2">x</span>
     </div>
-</div>
+    <div id="plusSign" class="math-symbol">+</div>
+    <div id="equalsSign" class="math-symbol">=</div>
+    <div id="questionSign" class="math-symbol">?</div>
+    <div id="minusSign" class="math-symbol">-</div>
+    <div id="xxNumber" class="math-symbol">xx</div>
+    <div id="finalQuestion" class="math-symbol">?</div>
 
-<script>
-    const symbols = ['🐶', '🐯', '🦄', '🐸', '🐼', '🚀', '🌈', '🦉', '💎', '🔥', '🦁', '🐢', '🦊', '🐨', '🧞', '🎭', '🍀', '🍎', '🍄', '🌍'];
-    let magicSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-    let step = 0;
-    let lang = 'bs';
+    <!-- SUBTITLES -->
+    <div id="subtitleContainer">
+        <p id="mainSubtitle" class="subtitle"></p>
+    </div>
 
-    const texts = {
-        bs: {
-            intro: ["Pozdrav! Ja sam VELIKI MERLIN!", "Danas ću pročitati tvoje misli...", "Magija počinje SADA!"],
-            step1: "Zamisli dvocifren broj:",
-            step2: "Razdvoji cifre i saberi ih:",
-            step3: "Zbir oduzmi od svog broja:",
-            step4: "Zapamti sliku pored svog broja:",
-            step5: "Gledaj duboko u tu sliku...",
-            reveal: "TVOJA SLIKA JE...",
-            btn2: "ZAMISLIO SAM 🤔", btn3: "SABRAO SAM ➕", btn4: "ODUZEO SAM ✨", btn5: "ZAPAMTIO SAM 🖼️", btnAgain: "PONOVO 🔥"
-        },
-        en: {
-            intro: ["Greetings! I am GREAT MERLIN!", "I will read your mind today...", "Magic starts NOW!"],
-            step1: "Think of a 2-digit number:",
-            step2: "Split digits and add them:",
-            step3: "Subtract sum from your number:",
-            step4: "Remember the picture:",
-            step5: "Look deep into the picture...",
-            reveal: "YOUR PICTURE IS...",
-            btn2: "I GOT IT 🤔", btn3: "ADDED ➕", btn4: "DONE ✨", btn5: "REMEMBERED 🖼️", btnAgain: "AGAIN 🔥"
-        }
-    };
+    <!-- GRID -->
+    <div id="numberGrid" class="number-grid"></div>
+    
+    <!-- INDICATORS -->
+    <div id="pageIndicator" class="page-indicator">
+        <div class="page-dot active"></div>
+        <div class="page-dot"></div>
+        <div class="page-dot"></div>
+        <div class="page-dot"></div>
+    </div>
 
-    const content = document.getElementById('content');
-    const btn = document.getElementById('actionBtn');
-    const msg = document.getElementById('merlinMessage');
-    const dots = document.getElementById('thinkDots');
+    <!-- CARD -->
+    <div id="magicCard" class="card-wrapper">
+        <div class="card">
+            <div class="card-face card-front" id="card-front">?</div>
+            <div class="card-face card-back" id="revealedSymbol"></div>
+        </div>
+    </div>
 
-    function startIntro(selectedLang) {
-        lang = selectedLang;
-        document.getElementById('langSection').classList.add('hidden');
-        content.classList.remove('hidden');
-        dots.classList.remove('hidden');
+    <script>
+        // ============================================
+        // SYSTEMS INIT
+        // ============================================
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let isMuted = false;
+        let selectedLang = 'bs';
+
+        // --- PARTICLE ENGINE ---
+        const particlesContainer = document.getElementById('particles-container');
+        const ParticleEngine = {
+            spawn: (x, y, count = 10, color = '#00f2ff', type = 'fly') => {
+                for(let i=0; i<count; i++) {
+                    const p = document.createElement('div');
+                    p.classList.add('particle');
+                    
+                    const size = Math.random() * 6 + 2;
+                    const tx = (Math.random() - 0.5) * 400 + 'px';
+                    const ty = (Math.random() - 0.5) * 400 + 'px';
+                    const duration = Math.random() * 1 + 0.5;
+
+                    p.style.width = size + 'px';
+                    p.style.height = size + 'px';
+                    p.style.background = color;
+                    p.style.left = x + 'px';
+                    p.style.top = y + 'px';
+                    p.style.boxShadow = `0 0 ${size*2}px ${color}`;
+                    
+                    p.style.setProperty('--tx', tx);
+                    p.style.setProperty('--ty', ty);
+
+                    if (type === 'fly') {
+                        p.style.animation = `particleFly ${duration}s ease-out forwards`;
+                    } else {
+                        p.style.animation = `particleFade ${duration}s ease-out forwards`;
+                    }
+
+                    particlesContainer.appendChild(p);
+
+                    setTimeout(() => {
+                        p.remove();
+                    }, duration * 1000);
+                }
+            }
+        };
+
+        // --- AUDIO SOUND FX ---
+        const SoundFX = {
+            playDrone: () => {
+                if (isMuted) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(50, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 10);
+                osc.stop(audioCtx.currentTime + 10);
+            },
+            playIntroTone: () => {
+                if (isMuted) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                if (selectedLang === 'bs') {
+                    // Mistični zvon
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(554.37, audioCtx.currentTime + 0.5);
+                    osc.frequency.exponentialRampToValueAtTime(659.25, audioCtx.currentTime + 1);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2);
+                } else {
+                    // Engleski whoosh
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.4);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                }
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 2);
+            },
+            playWhoosh: () => {
+                if (isMuted) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.5);
+            },
+            playThud: () => {
+                if (isMuted) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            },
+            playDing: () => {
+                if (isMuted) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.5);
+            },
+            playGlitch: () => {
+                if (isMuted) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const bufferSize = audioCtx.sampleRate * 0.5;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                noise.connect(gain);
+                gain.connect(audioCtx.destination);
+                noise.start();
+            }
+        };
+
+        // --- MUSIC ENGINE ---
+        const MusicEngine = {
+            ctx: null,
+            droneOsc: null,
+            droneGain: null,
+            isPlaying: false,
+            scale: [130.81, 155.56, 196.00, 233.08, 261.63, 311.13, 392.00, 466.16, 523.25], 
+
+            start: function(audioContext) {
+                this.ctx = audioContext;
+                this.isPlaying = true;
+                this.droneOsc = this.ctx.createOscillator();
+                this.droneGain = this.ctx.createGain();
+                this.droneOsc.type = 'sine';
+                this.droneOsc.frequency.value = 65.41;
+                const panner = this.ctx.createStereoPanner();
+                panner.pan.value = 0;
+                this.droneGain.gain.value = 0;
+                this.droneOsc.connect(panner);
+                panner.connect(this.droneGain);
+                this.droneGain.connect(this.ctx.destination);
+                this.droneOsc.start();
+                this.droneGain.gain.linearRampToValueAtTime(isMuted ? 0 : 0.35, this.ctx.currentTime + 5);
+                this.scheduleNextNote();
+            },
+
+            scheduleNextNote: function() {
+                if (!this.isPlaying) return;
+                const freq = this.scale[Math.floor(Math.random() * this.scale.length)];
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(isMuted ? 0 : 0.12, this.ctx.currentTime + 0.1); 
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 2);
+                const panner = this.ctx.createStereoPanner();
+                panner.pan.value = (Math.random() * 2) - 1;
+                osc.connect(panner);
+                panner.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 2);
+                const delay = Math.random() * 3000 + 2000;
+                setTimeout(() => this.scheduleNextNote(), delay);
+            },
+
+            stop: function() {
+                this.isPlaying = false;
+                if (this.droneGain) {
+                    this.droneGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 2);
+                    setTimeout(() => {
+                        if(this.droneOsc) {
+                            try { this.droneOsc.stop(); } catch(e){}
+                        }
+                    }, 2000);
+                }
+            },
+
+            setMute: function(mute) {
+                isMuted = mute;
+                if(this.droneGain) {
+                    this.droneGain.gain.setTargetAtTime(mute ? 0.001 : 0.35, this.ctx.currentTime, 0.5);
+                }
+            }
+        };
+
+        const TIMING = {
+            SUBTITLE: 5000,
+            GRID_ROTATION: 4000,
+            MAX_GRID_CYCLES: 2,
+            CARD_FLIP_DELAY: 2000
+        };
+
+        const SYMBOLS = ['🔮', '🧿', '🌙', '⭐', '🌌', '🔱', '👁️', '🦋', '🔥', '💎', '🕯️', '🦂', '🐶', '🐯', '🦄', '🐸', '🐼', '🚀', '🌈', '🦉'];
+        let magicSymbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+        const possibleResults = [9, 18, 27, 36, 45, 54, 63, 72, 81];
+
+        const startOverlay = document.getElementById('start-overlay');
+        const startBtn = document.getElementById('start-btn');
+        const langBtns = document.querySelectorAll('.lang-select-btn');
+        const resetOverlay = document.getElementById('reset-overlay');
+        const resetBtn = document.getElementById('reset-btn');
+        const resetTitle = document.getElementById('reset-title');
+        const muteBtn = document.getElementById('mute-btn');
+        const glitchOverlay = document.getElementById('glitchOverlay');
+        const subtitleEl = document.getElementById('mainSubtitle');
+        const gridEl = document.getElementById('numberGrid');
+        const dotsContainer = document.getElementById('pageIndicator');
+        const cardWrapper = document.getElementById('magicCard');
+        const revealedSymbol = document.getElementById('revealedSymbol');
+        const cardFront = document.getElementById('card-front');
         
-        let idx = 0;
-        function run() {
-            if(idx < texts[lang].intro.length) {
-                msg.innerHTML = texts[lang].intro[idx];
-                idx++;
-                setTimeout(run, 2500);
-            } else { startTrick(); }
-        }
-        run();
-    }
+        const x1 = document.getElementById('x1');
+        const x2 = document.getElementById('x2');
+        const plusSign = document.getElementById('plusSign');
+        const equalsSign = document.getElementById('equalsSign');
+        const questionSign = document.getElementById('questionSign');
+        const minusSign = document.getElementById('minusSign');
+        const xxNumber = document.getElementById('xxNumber');
+        const finalQuestion = document.getElementById('finalQuestion');
 
-    function startTrick() {
-        step = 1;
-        msg.innerHTML = texts[lang].step1;
-        const nBox = document.createElement('div');
-        nBox.id = "nBox";
-        nBox.className = "number-box";
-        nBox.innerHTML = `<div class="number-display">XX</div>`;
-        content.appendChild(nBox);
-        btn.textContent = texts[lang].btn2;
-        btn.classList.remove('hidden');
-    }
+        let currentIndex = 0;
+        let gridInterval = null;
+        let spinInterval = null;
 
-    function handleLogic() {
-        step++;
-        btn.classList.add('hidden');
-        const nDisplay = document.querySelector('.number-display');
+        // --- FUNCTIONS ---
+        function startIntroSpin() {
+            cardWrapper.classList.add('spinning-intro');
+            cardWrapper.classList.remove('flipped');
+            
+            const cardRect = cardWrapper.getBoundingClientRect();
+            const centerX = cardRect.left + cardRect.width / 2;
+            const centerY = cardRect.top + cardRect.height / 2;
+            
+            spinInterval = setInterval(() => {
+                const randomS = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+                cardFront.textContent = randomS;
+                ParticleEngine.spawn(centerX, centerY, 3, '#00f2ff', 'fly');
+            }, 400);
+        }
 
-        if (step === 2) {
-            msg.innerHTML = texts[lang].step2;
-            nDisplay.innerHTML = `X<span class="operator">+</span>X<span class="equals">=</span>`;
-            setTimeout(() => { btn.textContent = texts[lang].btn3; btn.classList.remove('hidden'); }, 1500);
-        } 
-        else if (step === 3) {
-            msg.innerHTML = texts[lang].step3;
-            nDisplay.innerHTML = `XX <span class="operator">-</span>`;
-            setTimeout(() => { btn.textContent = texts[lang].btn4; btn.classList.remove('hidden'); }, 1500);
-        }
-        else if (step === 4) {
-            msg.innerHTML = texts[lang].step4;
-            if(document.getElementById('nBox')) document.getElementById('nBox').remove();
-            showGrid();
-            setTimeout(() => { btn.textContent = texts[lang].btn5; btn.classList.remove('hidden'); }, 2500);
-        }
-        else if (step === 5) {
-            msg.innerHTML = texts[lang].step5;
-            document.querySelector('.grid').style.opacity = "0.2";
-            setTimeout(() => showFinal(), 3000);
-        }
-    }
+        function flyAwayCard() {
+            clearInterval(spinInterval);
+            cardWrapper.classList.remove('spinning-intro');
+            
+            const cardRect = cardWrapper.getBoundingClientRect();
+            const centerX = cardRect.left + cardRect.width / 2;
+            const centerY = cardRect.top + cardRect.height / 2;
+            ParticleEngine.spawn(centerX, centerY, 30, '#ff0055', 'fly');
 
-    function showGrid() {
-        const grid = document.createElement('div');
-        grid.className = 'grid';
-        
-        // 1. Kreiraj listu brojeva od 0 do 99
-        let numbers = [];
-        for (let i = 0; i < 100; i++) {
-            numbers.push(i);
+            cardWrapper.classList.add('fly-away');
+            SoundFX.playWhoosh();
+            
+            setTimeout(() => {
+                cardWrapper.classList.remove('fly-away');
+                cardFront.textContent = '?';
+            }, 1500);
         }
-        
-        // 2. Izmiješaj brojeve (Fisher-Yates shuffle)
-        for (let i = numbers.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-        }
-        
-        // 3. Za svaki broj dodaj odgovarajući simbol
-        for (let i = 0; i < 100; i++) {
-            const number = numbers[i];
-            const s = (number % 9 === 0) ? magicSymbol : symbols[Math.floor(Math.random() * symbols.length)];
-            grid.innerHTML += `<div class="grid-item"><div class="grid-number">${number}</div><div class="grid-symbol">${s}</div></div>`;
-        }
-        
-        content.appendChild(grid);
-    }
 
-    function showFinal() {
-        content.innerHTML = `<div id="merlinMessage" style="color:#ffd700; font-size:clamp(1.8rem, 5vh, 3rem);">${texts[lang].reveal}</div><div style="font-size: clamp(8rem, 25vh, 15rem); text-shadow: 0 0 50px #ffd700; animation: float 2s infinite;">${magicSymbol}</div>`;
-        btn.textContent = texts[lang].btnAgain;
-        btn.classList.remove('hidden');
-        btn.onclick = () => location.reload();
-    }
-</script>
+        const subtitles = {
+            bs: [
+                { text: "Pokazaću vam jedan magični trik.", duration: 4000, sound: "drone" },
+                { text: "Gdje ćemo <span class='highlight'>ti</span> i ja kroz video i malo računanja", duration: 5000 },
+                { text: "Na kraju dobiti isti simbol.", duration: 4000 },
+                { text: "Pa da krenemo...", duration: 2500 },
+                { text: "Zamisli jedan dvocifreni broj.", duration: 4000, action: "showLines" },
+                { text: "<span class='highlight'>ZAMISLILI ???</span>", duration: 3000 },
+                { text: "Razdvojite ga i saberite brojeve", duration: 6000, action: "splitAndPlus" },
+                { text: "<span class='highlight'>SABRALI ???</span>", duration: 3000 },
+                { text: "SUPER! Oduzmi dobijeni broj od vašeg zamišljenog broja", duration: 6000, action: "showMinus" },
+                { text: "Zapamti taj broj što si dobio jer pomoću njega ćeš dobiti simbol", duration: 5000, action: "clearAll" },
+                { text: "Sada samo ostaje da pronađeš svoj broj i provjeriš koji si simbol ti dobio", duration: 4000, action: "showGrid" },
+                { text: "<span class='highlight'>Da li smo izabrali isto?</span>", duration: 4000, action: "showCard", sound: "ding" }
+            ],
+            en: [
+                { text: "I will show you a magic trick.", duration: 4000, sound: "drone" },
+                { text: "Where <span class='highlight'>you</span> and I go through a video and a little bit of math", duration: 5000 },
+                { text: "At the end get same symbol.", duration: 4000 },
+                { text: "So let's begin...", duration: 2500 },
+                { text: "Think of a two-digit number.", duration: 4000, action: "showLines" },
+                { text: "<span class='highlight'>DID YOU THINK OF ONE ???</span>", duration: 3000 },
+                { text: "Split it up and add numbers", duration: 6000, action: "splitAndPlus" },
+                { text: "<span class='highlight'>ADDED THEM ???</span>", duration: 3000 },
+                { text: "Great! Subtract the number you got from your original number", duration: 6000, action: "showMinus" },
+                { text: "Remember that number you got because with it you will get a symbol", duration: 5000, action: "clearAll" },
+                { text: "Now just find your number and check which symbol you got", duration: 4000, action: "showGrid" },
+                { text: "<span class='highlight'>Did we choose the same?</span>", duration: 4000, action: "showCard", sound: "ding" }
+            ]
+        };
 
+        muteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            MusicEngine.setMute(isMuted);
+            muteBtn.textContent = isMuted ? '🔇' : '🔊';
+        });
+
+        startBtn.addEventListener('click', () => {
+            startOverlay.style.opacity = '0';
+            setTimeout(() => { startOverlay.style.display = 'none'; }, 800);
+            
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            MusicEngine.start(audioCtx);
+            SoundFX.playIntroTone(); // Tonski uvod
+            
+            createStars();
+            generateGridData();
+            startIntroSpin();
+            showSubtitle();
+        });
+
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const lang = e.target.dataset.lang;
+                selectedLang = lang;
+                langBtns.forEach(b => b.classList.remove('selected'));
+                e.target.classList.add('selected');
+                startBtn.classList.remove('disabled');
+                if(lang === 'bs') {
+                    startBtn.textContent = "POKRENI ČAROLIJU";
+                    if (resetOverlay.style.display !== 'none') {
+                        resetTitle.textContent = "DA LI ŽELITE DA POKUŠATE PONOVO?";
+                        resetBtn.textContent = "IGRAJ PONOVO";
+                    }
+                } else if(lang === 'en') {
+                    startBtn.textContent = "START THE MAGIC";
+                    if (resetOverlay.style.display !== 'none') {
+                        resetTitle.textContent = "DO YOU WANT TO TRY AGAIN?";
+                        resetBtn.textContent = "PLAY AGAIN";
+                    }
+                }
+            });
+        });
+
+        resetBtn.addEventListener('click', () => {
+            resetOverlay.style.display = 'none';
+            resetAllState();
+            generateGridData();
+            showSubtitle();
+        });
+
+        function resetAllState() {
+            clearInterval(gridInterval);
+            document.body.classList.remove('glitch-active');
+            glitchOverlay.classList.remove('glitch-active-overlay');
+            [x1, x2, plusSign, equalsSign, questionSign, minusSign, xxNumber, finalQuestion].forEach(el => {
+                el.style = "";
+                el.classList.remove('visible');
+            });
+            cardWrapper.classList.remove('active', 'flipped');
+            revealedSymbol.textContent = "";
+            gridEl.classList.remove('active');
+            gridEl.style.opacity = '0';
+            dotsContainer.classList.remove('visible');
+            subtitleEl.classList.remove('show');
+            subtitleEl.innerHTML = "";
+            particlesContainer.innerHTML = '';
+            currentIndex = 0;
+        }
+
+        function createStars() {
+            const s = document.getElementById('stars');
+            s.innerHTML = '';
+            for(let i=0; i<80; i++) {
+                let star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                s.appendChild(star);
+            }
+        }
+
+        function generateGridData() {
+            magicSymbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+            let html = '';
+            for (let i = 0; i <= 99; i++) {
+                let s;
+                if (possibleResults.includes(i)) {
+                    s = magicSymbol;
+                } else {
+                    do {
+                        s = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+                    } while (s === magicSymbol);
+                }
+                html += `
+                    <div class="grid-item">
+                        <div class="grid-number">${i}</div>
+                        <div class="grid-symbol">${s}</div>
+                    </div>
+                `;
+            }
+            gridEl.innerHTML = html;
+        }
+
+        function triggerGlitch() {
+            document.body.classList.add('glitch-active');
+            glitchOverlay.classList.add('glitch-active-overlay');
+            SoundFX.playGlitch();
+            setTimeout(() => {
+                document.body.classList.remove('glitch-active');
+                glitchOverlay.classList.remove('glitch-active-overlay');
+            }, 1000);
+        }
+
+        function getGridHTML(start, end) {
+            let html = '';
+            for (let i = start; i <= end; i++) {
+                let s;
+                if (possibleResults.includes(i)) {
+                    s = magicSymbol;
+                } else {
+                    do {
+                        s = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+                    } while (s === magicSymbol);
+                }
+                html += `
+                    <div class="grid-item">
+                        <div class="grid-number">${i}</div>
+                        <div class="grid-symbol">${s}</div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function updateDots(index) {
+            const dots = dotsContainer.querySelectorAll('.page-dot');
+            dots.forEach((dot, i) => {
+                if(i === index) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+
+        function startGridRotation() {
+            const pages = [
+                { start: 0, end: 24 }, { start: 25, end: 49 },
+                { start: 50, end: 74 }, { start: 75, end: 99 }
+            ];
+            let cycle = 0;
+            let pageIndex = 0;
+            dotsContainer.classList.add('visible');
+            gridEl.classList.add('active');
+
+            const showPage = () => {
+                gridEl.style.opacity = '0'; 
+                gridEl.style.transform = 'translate(-50%, -50%) scale(0.95)';
+                setTimeout(() => {
+                    gridEl.innerHTML = getGridHTML(pages[pageIndex].start, pages[pageIndex].end);
+                    updateDots(pageIndex);
+                    gridEl.style.opacity = '1'; 
+                    gridEl.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 400); 
+            };
+
+            showPage();
+
+            gridInterval = setInterval(() => {
+                pageIndex++;
+                if (pageIndex >3) {
+                    pageIndex = 0;
+                    cycle++;
+                }
+                if (cycle >= TIMING.MAX_GRID_CYCLES) {
+                    clearInterval(gridInterval);
+                    gridEl.style.opacity = '0';
+                    dotsContainer.classList.remove('visible');
+                    setTimeout(() => {
+                        currentIndex++;
+                        showSubtitle();
+                    }, 1000);
+                    return;
+                }
+                showPage();
+            }, TIMING.GRID_ROTATION);
+        }
+
+        function showSubtitle() {
+            if (currentIndex < subtitles[selectedLang].length) {
+                const current = subtitles[selectedLang][currentIndex];
+                
+                // GOVOR UKLONJEN
+                
+                if (currentIndex === 4) {
+                    flyAwayCard();
+                    setTimeout(() => { x1.style.animation = 'fadeIn 0.5s ease-in forwards'; }, 500);
+                    setTimeout(() => { x2.style.animation = 'fadeIn 0.5s ease-in forwards'; }, 800);
+                }
+
+                subtitleEl.innerHTML = current.text;
+                subtitleEl.classList.remove('show');
+                void subtitleEl.offsetWidth;
+                subtitleEl.classList.add('show');
+
+                if (current.sound) {
+                    if(current.sound === 'drone') SoundFX.playDrone();
+                    if(current.sound === 'ding') SoundFX.playDing();
+                }
+
+                if (current.action === "splitAndPlus") {
+                    setTimeout(() => {
+                        x1.style.animation = 'fadeIn 0.5s ease-in forwards, moveLeft 1s ease-in-out forwards';
+                        x1.style.animationDelay = '0s, 0s';
+                        x2.style.animation = 'fadeIn 0.5s ease-in forwards, moveRight 1s ease-in-out forwards';
+                        x2.style.animationDelay = '0s, 0s';
+                        SoundFX.playWhoosh();
+                    }, 500);
+                    setTimeout(() => { plusSign.style.animation = 'fadeIn 0.5s ease-in forwards'; SoundFX.playThud(); }, 1500);
+                    setTimeout(() => {
+                        x1.style.animation = 'fadeOut 0.5s ease-out forwards';
+                        x2.style.animation = 'fadeOut 0.5s ease-out forwards';
+                        plusSign.style.animation = 'fadeOut 0.5s ease-out forwards';
+                    }, 3500);
+                    setTimeout(() => { equalsSign.style.animation = 'fadeIn 0.3s ease-in forwards'; }, 4000);
+                    setTimeout(() => {
+                        equalsSign.style.animation = 'fadeOut 0.3s ease-out forwards';
+                        questionSign.style.transform = 'translate(-50%, -50%)';
+                        questionSign.style.transition = 'transform 0s';
+                        questionSign.style.opacity = '1';
+                        questionSign.style.animation = 'pulsateQuestion 2s ease-in-out infinite';
+                    }, 4500);
+                    setTimeout(() => { questionSign.style.animation = 'none'; }, current.duration - 500);
+                }
+
+                if (current.action === "showMinus") {
+                    setTimeout(() => {
+                        triggerGlitch(); 
+                        questionSign.style.transform = 'translate(120%, -50%)'; 
+                        questionSign.style.transition = 'transform 1s ease-in-out';
+                    }, 500);
+                    setTimeout(() => { 
+                        xxNumber.style.transform = 'translate(-150%, -50%)'; 
+                        xxNumber.style.animation = 'fadeIn 0.5s ease-in forwards'; 
+                        SoundFX.playThud();
+                    }, 1000);
+                    setTimeout(() => { 
+                        minusSign.style.animation = 'fadeIn 0.5s ease-in forwards'; 
+                        SoundFX.playGlitch();
+                    }, 1500);
+                }
+
+                if (current.action === "clearAll") {
+                    questionSign.style.animation = 'fadeOut 0.5s ease-out forwards';
+                    xxNumber.style.animation = 'fadeOut 0.5s ease-out forwards';
+                    minusSign.style.animation = 'fadeOut 0.5s ease-out forwards';
+                    setTimeout(() => {
+                        finalQuestion.style.transform = 'translate(-50%, -50%)';
+                        finalQuestion.style.opacity = '1';
+                        finalQuestion.style.animation = 'pulsateQuestion 2s ease-in-out infinite';
+                    }, 1000);
+                    setTimeout(() => {
+                        finalQuestion.style.animation = 'fadeOut 0.5s ease-out forwards';
+                        finalQuestion.style.opacity = '0';
+                    }, current.duration - 500);
+                }
+
+                if (current.action === "showGrid") {
+                    startGridRotation();
+                    return; 
+                }
+
+                if (current.action === "showCard") {
+                    revealedSymbol.textContent = magicSymbol;
+                    
+                    cardWrapper.classList.remove('fly-away');
+                    cardWrapper.style.opacity = '1';
+                    
+                    cardWrapper.classList.add('active');
+                    cardWrapper.classList.remove('flipped'); 
+                    
+                    const cardRect = cardWrapper.getBoundingClientRect();
+                    ParticleEngine.spawn(cardRect.left + cardRect.width/2, cardRect.top + cardRect.height/2, 50, '#00f2ff', 'fade');
+
+                    setTimeout(() => {
+                        cardWrapper.classList.add('flipped');
+                        SoundFX.playWhoosh();
+                    }, TIMING.CARD_FLIP_DELAY);
+                }
+
+                if (current.duration) {
+                    setTimeout(() => { subtitleEl.classList.remove('show'); }, current.duration);
+                    currentIndex++;
+                    setTimeout(showSubtitle, current.duration);
+                }
+            } else {
+                setTimeout(() => {
+                    if(selectedLang === 'en') {
+                        resetTitle.textContent = "DO YOU WANT TO TRY AGAIN?";
+                        resetBtn.textContent = "PLAY AGAIN";
+                    } else {
+                        resetTitle.textContent = "DA LI ŽELITE DA POKUŠATE PONOVO?";
+                        resetBtn.textContent = "IGRAJ PONOVO";
+                    }
+                    resetOverlay.style.display = 'flex';
+                }, 1000);
+            }
+        }
+    </script>
 </body>
 </html>
