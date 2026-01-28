@@ -97,9 +97,9 @@
         
         #reset-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 10000;
+            background: rgba(0,0,0,0.85); z-index: 10000;
             display: none; flex-direction: column; align-items: center; justify-content: center;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
 
         /* --- PARTICLES --- */
@@ -336,6 +336,25 @@
     <div id="reset-overlay">
         <h2 id="reset-title" style="color:white; margin-bottom:20px; font-family:'Cinzel';">DA LI ŽELITE DA POKUŠATE PONOVO?</h2>
         <button id="reset-btn" class="overlay-btn">IGRAJ PONOVO</button>
+
+        <!-- PayPal Donacija Dugme -->
+        <div style="margin-top: 25px;">
+            <a href="https://paypal.me/peckovic" target="_blank" 
+               style="text-decoration: none; 
+                      color: white; 
+                      border: 2px solid #0079C1; 
+                      background: #0079C1; 
+                      padding: 12px 30px; 
+                      border-radius: 50px; 
+                      font-family: 'Montserrat', sans-serif; 
+                      font-weight: bold; 
+                      font-size: 16px;
+                      transition: all 0.3s ease; 
+                      display: inline-block; 
+                      box-shadow: 0 0 15px rgba(0,121,193, 0.4);">
+                ☕ Doniraj preko PayPala
+            </a>
+        </div>
     </div>
 
     <!-- GLITCH OVERLAY -->
