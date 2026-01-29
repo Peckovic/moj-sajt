@@ -713,20 +713,6 @@
         let gridInterval = null;
         let spinInterval = null;
 
-        // --- AD RELOAD FUNCTION ---
-        function reloadAds() {
-            // Ukloni staru Adsterra skriptu
-            const oldAdScript = document.querySelector('script[src*="effectivegatecpm.com"]');
-            if (oldAdScript) {
-                oldAdScript.remove();
-            }
-            
-            // Dodaj novu skriptu (triggera popunder ponovo)
-            const newAdScript = document.createElement('script');
-            newAdScript.src = 'https://pl28594525.effectivegatecpm.com/6d/f6/46/6df646d7fc6ddaa935fb14546db40f2c.js';
-            document.body.appendChild(newAdScript);
-        }
-
         // --- FUNCTIONS ---
         function startIntroSpin() {
             cardWrapper.classList.add('spinning-intro');
@@ -804,7 +790,7 @@
             
             if (audioCtx.state === 'suspended') audioCtx.resume();
             MusicEngine.start(audioCtx);
-            SoundFX.playIntroTone();
+            SoundFX.playIntroTone(); // Tonski uvod
             
             createStars();
             generateGridData();
@@ -840,9 +826,6 @@
             resetAllState();
             generateGridData();
             showSubtitle();
-            
-            // RELOAD REKLAME - SAMO OVDJE!
-            reloadAds();
         });
 
         function resetAllState() {
@@ -985,6 +968,8 @@
             if (currentIndex < subtitles[selectedLang].length) {
                 const current = subtitles[selectedLang][currentIndex];
                 
+                // GOVOR UKLONJEN
+                
                 if (currentIndex === 4) {
                     flyAwayCard();
                     setTimeout(() => { x1.style.animation = 'fadeIn 0.5s ease-in forwards'; }, 500);
@@ -1033,10 +1018,12 @@
                         questionSign.style.transition = 'transform 1s ease-in-out';
                     }, 500);
                     setTimeout(() => {
+                        // Postavi "xx" u centar prije nego što ga pomakneš
                         xxNumber.style.transform = 'translate(-50%, -50%)';
                         xxNumber.style.animation = 'fadeIn 0.5s ease-in forwards';
                         SoundFX.playThud();
                         
+                        // Nakon pojavljivanja, pomjeri ga
                         setTimeout(() => {
                             xxNumber.style.transform = 'translate(-150%, -50%)';
                             xxNumber.style.transition = 'transform 1s ease-in-out';
@@ -1105,6 +1092,10 @@
             }
         }
     </script>
+
+    <!-- ADSTERRA POPUNDER AD CODE START -->
+    <script src="https://pl28594525.effectivegatecpm.com/6d/f6/46/6df646d7fc6ddaa935fb14546db40f2c.js"></script>
+    <!-- ADSTERRA POPUNDER AD CODE END -->
 
 </body>
 </html>
